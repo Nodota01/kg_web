@@ -1,0 +1,105 @@
+h1 {
+    color: orange;
+    background-color: azure;
+    border: 1px solid aqua;
+    text-align: center;
+    font-size: 300%;
+}
+
+p {
+    color: black;
+    width: auto;
+    font-family: "Times New Roman";
+    font-size: 20px;
+    background-color: aquamarine;
+}
+
+table {
+    visibility: visible;
+    border-collapse: collapse;
+    min-width: 500px;
+    margin:auto;
+    text-align: center;
+    border-bottom: 1px solid black;
+}
+.tabel_head th {
+    background-color: rgb(75, 75, 75);
+    color: white;
+    padding:3px 0px;
+}
+
+a.button, a.button:link, a.button:visited{
+    color: white;
+    display: inline-block;
+    background-color: blue;
+    border-radius: 10px;
+    padding: 8px;
+    margin: 5px;
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+}
+/* 鼠标移动到链接上 */
+a.button:hover {
+    color: white;
+    background-color: green;
+    border-radius: 10px;
+    padding: 8px;
+    margin: 5px;
+    text-decoration: none;
+}
+/* 鼠标点击时 */
+a.button:active {
+    color: white;
+    background-color: aqua;
+    border-radius: 10px;
+    padding: 8px;
+    margin: 5px;
+    text-decoration: none;
+}
+
+ul.nav {
+    width: 10%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    position: fixed;
+    overflow: auto;
+    background-color: beige;
+}
+ul.nav li a{
+    display: block;
+    text-decoration: none;
+    color: black;
+    padding: 8px 10px;
+}
+ul.nav li a:hover{
+    background-color: grey;
+    color: white;
+}
+
+form.my_form{
+    margin: auto;
+    background-color: azure;
+}
+@media screen and (max-width: 600px) {
+    form.my_form{
+        margin: auto;
+        background-color: aqua;
+    }
+}
+
+div.login_div {
+    margin: auto;
+    text-align: center;
+    width: fit-content;
+    padding: 30px;
+    background-color: aqua;
+    border-radius: 10px;
+} 
+div.login_div input{
+    display: block;
+    margin: 20px 0px;
+    cursor: pointer;
+}

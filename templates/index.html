@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Boot Home page</title>
+    <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
+    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="static/js/jquery-3.6.0.min.js"></script>
+    <script src="static/js/index_page_script.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md bg-primary navbar-dark">
+        <!-- Brand -->
+        <a class="navbar-brand mx-2" href="#" >助眠知识图谱平台</a>
+
+        <!-- Toggler/collapsibe Button -->
+        <button class="navbar-toggler" style="margin-right:10px;" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav px-2">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">帮助</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">关于</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 
+    m- 对于设置的类margin
+    p- 对于设置的类padding
+    t- 对于设置margin-top或padding-top
+    b- 对于设置margin-bottom或padding-bottom
+    s- （开始）用于设置margin-left或padding-leftLTRmargin-right或padding-rightRTL中的类
+    e-（结束）对于设置margin-right或padding-right在 LTRmargin-left或padding-leftRTL中的类
+    x- 对于同时设置*-left和*-right
+    y- 对于同时设置*-top和*-bottom
+    空白 - 对于在元素的所有 4 个边上设置 amargin或的类padding 
+    -->
+    <div class="container p-3 my-5 border bg-light text-body rounded">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3 my-2">
+                <input id="search_text" type="text" class="form-control" placeholder="关键字">
+            </div>
+            <div class="col-sm-2 my-2">
+                <a id="search_button" class="btn btn-primary" role="button">搜索</a>
+            </div>
+        </div>
+        <code id="search_result" class="p-3">
+            这里显示搜索结果
+        </code>
+        <!-- <h1>Home page</h1>
+        <p>Hello World</p>
+        <div class="row">
+            <div class="col-sm-3">.col-sm-3</div>
+            <div class="col-sm-3">.col-sm-3</div>
+            <div class="col-sm-3">.col-sm-3</div>
+            <div class="col-sm-3">.col-sm-3</div>
+            <h1 class="my-3">h1 标题 <small>副标题</small></h1>
+        </div> -->
+</body>
+
+</html>

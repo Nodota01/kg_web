@@ -9,15 +9,17 @@
     <script src="static/js/bootstrap.bundle.min.js"></script>
     <script src="static/js/jquery-3.6.0.min.js"></script>
     <script src="static/js/index_page_script.js"></script>
+    <script src="static/js/echarts.min.js"></script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-md bg-primary navbar-dark">
         <!-- Brand -->
-        <a class="navbar-brand mx-2" href="#" >助眠知识图谱平台</a>
+        <a class="navbar-brand mx-2" href="#">助眠知识图谱平台</a>
 
         <!-- Toggler/collapsibe Button -->
-        <button class="navbar-toggler" style="margin-right:10px;" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+        <button class="navbar-toggler" style="margin-right:10px;" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -48,27 +50,32 @@
     y- 对于同时设置*-top和*-bottom
     空白 - 对于在元素的所有 4 个边上设置 amargin或的类padding 
     -->
-    <div class="container p-3 my-5 border bg-light text-body rounded">
-        <div class="row">
-            <div class="col-sm-6 offset-sm-3 my-2">
-                <input id="search_text" type="text" class="form-control" placeholder="关键字">
-            </div>
-            <div class="col-sm-2 my-2">
-                <a id="search_button" class="btn btn-primary" role="button">搜索</a>
-            </div>
+    <div class="container-md p-3 my-5 border bg-light text-body rounded">
+        <div class="col-md-6 col-10 input-group my-2">
+            <button type="button" class="btn btn-primary dropdown-toggle type_text" data-bs-toggle="dropdown">
+                类型
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item type_option">食疗食谱</a></li>
+                <li><a class="dropdown-item type_option">方剂</a></li>
+                <li><a class="dropdown-item type_option">按摩方法</a></li>
+            </ul>
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                属性
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="https://www.google.com">GOOGLE</a></li>
+                <li><a class="dropdown-item" href="https://www.runoob.com">RUNOOB</a></li>
+                <li><a class="dropdown-item" href="https://www.taobao.com">TAOBAO</a></li>
+            </ul>
+            <input id="search_text" type="text" class="form-control" placeholder="关键字">
+            <button id="search_button" class="btn btn-primary" type="submit">搜索</button>
         </div>
         <code id="search_result" class="p-3">
-            这里显示搜索结果
+            Hello
         </code>
-        <!-- <h1>Home page</h1>
-        <p>Hello World</p>
-        <div class="row">
-            <div class="col-sm-3">.col-sm-3</div>
-            <div class="col-sm-3">.col-sm-3</div>
-            <div class="col-sm-3">.col-sm-3</div>
-            <div class="col-sm-3">.col-sm-3</div>
-            <h1 class="my-3">h1 标题 <small>副标题</small></h1>
-        </div> -->
+        <div id="chart" style="width: auto;height: 600px;"></div>
+    </div>
 </body>
 
 </html>

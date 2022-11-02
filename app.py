@@ -26,23 +26,28 @@ def index_page():
 
 @app.post('/q')
 def query():
-    diseases = request.json
-    pattern = f'.*?{diseases["key_word"]}.*?'
-    # for dis in diseases:
-    #     pattern += f'.*?{dis[0:len(dis)-1]}.*?|'
-    # pattern = pattern.rstrip('|')
-    g = db.get_db()
-    # node_matcher = neo.NodeMatcher(graph)
-    # rela_matcher = neo.RelationshipMatcher(graph)
-    # shiliao_nodes = node_matcher.match('食疗食谱', 主治=neo.LIKE(pattern))
-    # nodes = list()
-    # for node in shiliao_nodes.all():
-    #     nodes.append(node)
-    result = Result({"categories":list(),
-           "nodes":list(),
-           "edges":list()})
+    """查询节点和关系接口
+    参数形如{type:"xxx", prop:"xxx", keyword:"xxx"}
+    """
+    prop_map = {  # 属性名称的映射
+        '按摩方法': {
+            '主治': '名称'
+        },
+        '药材': {
+            '名称': '中文名'
+        }
+    }
+    param = request.json
+    pattern = f'.*?{param["key_word"]}.*?'
+    prop = prop_map[param['type']][param['prop']] if prop_map.get(
+        param['type'], None) is not None and prop_map[param['type']].get(param['prop'], None) is not None else param['prop']
+    result = Result({"categories": list(),
+                     "nodes": list(),
+                     "edges": list()})
     categories = set()
-    sub_g = g.run(f'MATCH (a:方剂)<-[r:材料]->(b) WHERE a.主治 =~ "{pattern}" return a, r, b').to_subgraph()
+    g = db.get_db()
+    sub_g = g.run(
+        f'MATCH (a:{param["type"]})<-[r]->(b) WHERE a.{prop} =~ "{pattern}" return a, r, b').to_subgraph()
     if sub_g is None:
         return result.empty()
     for node in sub_g.nodes:
@@ -53,19 +58,21 @@ def query():
         catg = list(node.labels)[0]
         categories.add(catg)
         d['category'] = catg
-        d['name'] = n.get('中文名', None) if n.get('中文名', None) is not None else n.get('名称', None)
+        d['name'] = n.get('中文名', None) if n.get(
+            '中文名', None) is not None else n.get('名称', None)
         result['nodes'].append(d)
     for relation in sub_g.relationships:
         e = dict()
         e['source'] = relation.start_node['uuid']
         e['target'] = relation.end_node['uuid']
-        e['des'] = str(dict(relation))
+        des_dict = dict(relation)
+        des_dict.pop('uuid', None)
+        e['des'] = type(relation).__name__ + (str(des_dict) if len(des_dict) != 0 else '')
         result['edges'].append(e)
     for c in categories:
-        result['categories'].append({'name':c})
+        result['categories'].append({'name': c})
     logging.info(f'/q post val:{request.json}')
     return result.success()
-    
 
 
 # @app.route('/profile/<username>')

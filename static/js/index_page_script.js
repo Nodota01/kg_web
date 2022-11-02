@@ -3,15 +3,33 @@
 var cur_url = window.location.protocol + "//"
     + window.location.hostname + ":" + window.location.port + "/"
 
+//读type_prop.json
+function read_file(name) { // name为文件所在位置
+    let xhr = new XMLHttpRequest(),
+        okStatus = document.location.protocol === "file:" ? 0 : 200;
+    xhr.open('GET', name, false);
+    xhr.overrideMimeType("text/html;charset=utf-8");//默认为utf-8
+    xhr.send(null);
+    return xhr.status === okStatus ? xhr.responseText : null;
+}
+var fp = JSON.parse(read_file('static/data/type_prop.json'))
+
+//搜索方法
 function search() {
     //Echarts绘图
     var mychart = echarts.init(document.getElementById("chart"), null, { renderer: 'svg' })
     window.onresize = function () { mychart.resize() }
     var search_text = $("#search_text")
     if (search_text.val().length == 0) {
+        $("#search_result").text('请输入关键字')
+        return
+    } else if ($("#type_text").text().trim() == '类型' || $("#prop_text").text().trim() == '属性') {
+        $("#search_result").text('请选择类型和属性')
         return
     }
     var obj = {
+        type: $("#type_text").text(),
+        prop: $("#prop_text").text(),
         key_word: search_text.val()
     }
     $.ajax({
@@ -118,42 +136,36 @@ $(document).ready(function () {
     $("#search_text").keydown(function (e) {
         if (e.which == 13) {
             search()
+        } else {
+            return
         }
     });
     $("#search_button").click(function (e) {
         search()
     });
 
-    //选定搜索类型更改文本
-    $(".type_option").click(function (e) { 
-        var type = $(this).text()
-        $(".type_text").text(type);
+    // //选定搜索类型更改文本
+    // $(".type_option").click(function (e) { 
+    //     var type = $(this).text()
+    //     $(".type_text").text(type);
+    // });
+
+    //修改下拉菜单选项
+    $("#type_list").children().remove()
+    $("#prop_list").children().remove()
+    for (let k in fp) {
+        $("#type_list").append("<li><a class=\"dropdown-item type_option\">" + k + "</a></li>")
+    }
+    $(".type_option").click(function (e) { //点选类型后更改属性
+        $("#type_text").text($(this).text())
+        $("#prop_list").children().remove()
+        $("#prop_text").text('属性')
+        for (let p of fp[$(this).text()]) {
+            $("#prop_list").append("<li><a class=\"dropdown-item prop_option\">" + p + "</a></li>")
+        }
+        $(".prop_option").click(function (e) {
+            $("#prop_text").text($(this).text())
+        })
     });
 
-
-    // //SVG画图（需要d3）
-    // var width = 300;
-    // var height = 300;
-    // var svg = d3.select("body")     //选择文档中的body元素
-    //     .append("svg")          //添加一个svg元素
-    //     .attr("width", width)
-    //     .attr("height", height);
-
-    // var dataset = [ 2.5 , 2.1 , 1.7 , 1.3 , 0.9 ]
-    // var linear = d3.scaleLinear() //创建线性比例尺
-    // .domain([0, d3.max(dataset)])
-    // .range([0, 250]);
-    // var rectheight = 25
-    // svg.selectAll("rect")
-    //     .data(dataset)
-    //     .enter()
-    //     .append("rect")
-    //     .attr("x", 20)
-    //     .attr("y", function (d, i) { return i * rectheight })
-    //     .attr("width", function (d) { return linear(d) })
-    //     .attr("height", rectheight - 2)
-    //     .attr("fill", "steelblue")
-    // //创建坐标轴
-    // var axis = d3.axisBottom().scale(linear).ticks(7)
-    // svg.append("g").call(axis)
 });

@@ -52,21 +52,19 @@
     -->
     <div class="container-md p-3 my-5 border bg-light text-body rounded">
         <div class="col-md-6 col-10 input-group my-2">
-            <button type="button" class="btn btn-primary dropdown-toggle type_text" data-bs-toggle="dropdown">
+            <button type="button" id="type_text" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
                 类型
             </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item type_option">食疗食谱</a></li>
-                <li><a class="dropdown-item type_option">方剂</a></li>
-                <li><a class="dropdown-item type_option">按摩方法</a></li>
+            <ul id="type_list" class="dropdown-menu">
+                <li><a class="dropdown-item type_option">类型1</a></li>
+                <li><a class="dropdown-item type_option">类型2</a></li>
             </ul>
-            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+            <button type="button" id="prop_text" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
                 属性
             </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="https://www.google.com">GOOGLE</a></li>
-                <li><a class="dropdown-item" href="https://www.runoob.com">RUNOOB</a></li>
-                <li><a class="dropdown-item" href="https://www.taobao.com">TAOBAO</a></li>
+            <ul id="prop_list" class="dropdown-menu">
+                <li><a class="dropdown-item prop_option">属性1</a></li>
+                <li><a class="dropdown-item prop_option">属性2</a></li>
             </ul>
             <input id="search_text" type="text" class="form-control" placeholder="关键字">
             <button id="search_button" class="btn btn-primary" type="submit">搜索</button>

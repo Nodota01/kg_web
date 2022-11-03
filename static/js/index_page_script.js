@@ -18,14 +18,34 @@ var fp = JSON.parse(read_file('static/data/type_prop.json'))
 function search() {
     //Echarts绘图
     var mychart = echarts.init(document.getElementById("chart"), null, { renderer: 'svg' })
+    //点击结点事件
+    mychart.off('click')
+    mychart.on('click', function (params) {
+        if(params.event.which == 1 && params.dataType == 'node'){
+            console.log(params);
+            $("#node_detail_modal").modal("show")
+            $("#node_detail_title").text(params.name)
+            var text = ''
+            for(let o in params.data.des){
+                text += '<h5 class="text-dark bg-light p-2">' + o + '</h5>'
+                text += '<p class="text-dark">'+ params.data.des[o] + '</p>'
+            }
+            $("#node_detail_content").children().remove()
+            $("#node_detail_content").text('')
+            $("#node_detail_content").append(text)
+        }
+    });
     window.onresize = function () { mychart.resize() }
     var search_text = $("#search_text")
+    //检查关键字
     if (search_text.val().length == 0) {
         $("#search_result").text('请输入关键字')
         return
     } else if ($("#type_text").text().trim() == '类型' || $("#prop_text").text().trim() == '属性') {
         $("#search_result").text('请选择类型和属性')
         return
+    }else{
+        $("#search_result").text('Loading.....')
     }
     var obj = {
         type: $("#type_text").text(),
@@ -56,8 +76,13 @@ function search() {
                 // },
                 //提示框
                 tooltip: {
-                    show: true,
+                    show: false,
                     trigger: 'item',
+                    confine: true,
+                    textStyle: {
+                        width: 30,
+                        overflow: 'truncate'
+                    },
                     formatter: function (x) {
                         return x.data.des;
                     }
@@ -95,12 +120,15 @@ function search() {
                         roam: true,     //是否可以缩放
                         force: {        //节点之间的斥力
                             repulsion: 1500,
-                            edgeLength: [100, 150]
+                            edgeLength: [150, 200]
                         },
                         draggable: true,//是否可以拖拽
                         label: {        //节点标签
                             show: true,
                             color: '#000',
+                            formatter: function (x) {
+                                return x.data.name;
+                            }
                         },
                         edgeSymbol: ['none', 'arrow'], //边两端的形状
                         edgeSymbolSize: [4, 10],        //边两端标记的大小

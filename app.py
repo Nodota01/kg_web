@@ -37,6 +37,14 @@ def query():
             '名称': '中文名'
         }
     }
+    des_map = {  # 每个类型对应需要放入des的属性
+        '药材': ['功效', '别名', '归经', '性味'],
+        '食疗食谱': ['主治', '做法', '应用分析', '用法'],
+        '方剂': ['主治', '功效'],
+        '按摩方法': ['按摩顺序与技法'],
+        '穴位': ['主治', '取穴技巧', '经属', '自我按摩'],
+        '疾病': ['疾病概述']
+    }
     param = request.json
     pattern = f'.*?{param["key_word"]}.*?'
     prop = prop_map[param['type']][param['prop']] if prop_map.get(
@@ -60,6 +68,16 @@ def query():
         d['category'] = catg
         d['name'] = n.get('中文名', None) if n.get(
             '中文名', None) is not None else n.get('名称', None)
+        # 描述
+        des_dict = dict()
+        if des_map.get(catg, None) is not None:
+            for k in des_map[catg]:
+                value = n.get(k, None)
+                if value is not None:
+                    des_dict[k] = value
+            d['des'] = des_dict
+        else:
+            d['des'] = n
         result['nodes'].append(d)
     for relation in sub_g.relationships:
         e = dict()
@@ -67,7 +85,8 @@ def query():
         e['target'] = relation.end_node['uuid']
         des_dict = dict(relation)
         des_dict.pop('uuid', None)
-        e['des'] = type(relation).__name__ + (str(des_dict) if len(des_dict) != 0 else '')
+        e['des'] = type(relation).__name__ + \
+            (str(des_dict) if len(des_dict) != 0 else '')
         result['edges'].append(e)
     for c in categories:
         result['categories'].append({'name': c})

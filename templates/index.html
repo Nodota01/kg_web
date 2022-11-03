@@ -67,12 +67,34 @@
                 <li><a class="dropdown-item prop_option">属性2</a></li>
             </ul>
             <input id="search_text" type="text" class="form-control" placeholder="关键字">
-            <button id="search_button" class="btn btn-primary" type="submit">搜索</button>
+            <button id="search_button" class="btn btn-primary" type="submit">
+                搜索
+            </button>
         </div>
         <code id="search_result" class="p-3">
             Hello
         </code>
         <div id="chart" style="width: auto;height: 600px;"></div>
+    </div>
+    <!-- 模态框 -->
+    <div id="node_detail_modal" class="modal fade">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 id="node_detail_title" class="modal-title">模态框标题</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- 模态框内容 -->
+                <div id="node_detail_content" class="modal-body">
+                    模态框内容..
+                </div>
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 

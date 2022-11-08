@@ -1,18 +1,20 @@
 "use strict"
 
-var cur_url = window.location.protocol + "//"
+const cur_url = window.location.protocol + "//"
     + window.location.hostname + ":" + window.location.port + "/"
 
 //读type_prop.json
 function read_file(name) { // name为文件所在位置
     let xhr = new XMLHttpRequest(),
-        okStatus = document.location.protocol === "file:" ? 0 : 200;
-    xhr.open('GET', name, false);
-    xhr.overrideMimeType("text/html;charset=utf-8");//默认为utf-8
-    xhr.send(null);
-    return xhr.status === okStatus ? xhr.responseText : null;
+        okStatus = document.location.protocol === "file:" ? 0 : 200
+    xhr.open('GET', name, false)
+    xhr.overrideMimeType("text/html;charset=utf-8")//默认为utf-8
+    xhr.send(null)
+    return xhr.status === okStatus ? xhr.responseText : null
 }
-var fp = JSON.parse(read_file('static/data/type_prop.json'))
+const fp = JSON.parse(read_file('static/data/type_prop.json'))
+const quesn_data = JSON.parse(read_file("static/data/form_data.json"))
+const judge_standard = JSON.parse(read_file("static/data/judge_standard.json"))
 
 //搜索方法
 function search() {
@@ -21,20 +23,21 @@ function search() {
     //点击结点事件
     mychart.off('click')
     mychart.on('click', function (params) {
-        if(params.event.which == 1 && params.dataType == 'node'){
+        if (params.dataType == 'node') {
             console.log(params);
+            //显示节点详情模态框
             $("#node_detail_modal").modal("show")
             $("#node_detail_title").text(params.name)
             var text = ''
-            for(let o in params.data.des){
+            for (let o in params.data.des) {
                 text += '<h5 class="text-dark bg-light p-2">' + o + '</h5>'
-                text += '<p class="text-dark">'+ params.data.des[o] + '</p>'
+                text += '<p class="text-dark">' + params.data.des[o] + '</p>'
             }
             $("#node_detail_content").children().remove()
             $("#node_detail_content").text('')
             $("#node_detail_content").append(text)
         }
-    });
+    })
     window.onresize = function () { mychart.resize() }
     var search_text = $("#search_text")
     //检查关键字
@@ -44,8 +47,9 @@ function search() {
     } else if ($("#type_text").text().trim() == '类型' || $("#prop_text").text().trim() == '属性') {
         $("#search_result").text('请选择类型和属性')
         return
-    }else{
+    } else {
         $("#search_result").text('Loading.....')
+        $("#search_loadding").toggleClass('invisible')
     }
     var obj = {
         type: $("#type_text").text(),
@@ -59,6 +63,7 @@ function search() {
         contentType: "application/json",
         dataType: "json",
         success: function (response) {
+            $("#search_loadding").toggleClass('invisible')
             if (response.msg == 'fail') {
                 $("#search_result").text('错误')
                 return
@@ -119,8 +124,8 @@ function search() {
                         symbolSize: 60,  //节点大小
                         roam: true,     //是否可以缩放
                         force: {        //节点之间的斥力
-                            repulsion: 1500,
-                            edgeLength: [150, 200]
+                            repulsion: 800,
+                            edgeLength: [180, 200, 230]
                         },
                         draggable: true,//是否可以拖拽
                         label: {        //节点标签
@@ -153,10 +158,10 @@ function search() {
                         }
                     }
                 ],
-            };
+            }
             mychart.setOption(options)
         }
-    });
+    })
 }
 
 $(document).ready(function () {
@@ -167,10 +172,10 @@ $(document).ready(function () {
         } else {
             return
         }
-    });
+    })
     $("#search_button").click(function (e) {
         search()
-    });
+    })
 
     // //选定搜索类型更改文本
     // $(".type_option").click(function (e) { 
@@ -194,6 +199,66 @@ $(document).ready(function () {
         $(".prop_option").click(function (e) {
             $("#prop_text").text($(this).text())
         })
-    });
+    })
 
-});
+    //显示问卷模态框，并排版问卷
+    const pick_answer = ["没有", "很少", "有时", "经常", "总是"]
+    const toggle_answer = ["无", "有"]
+    const tb = $("#questionnaire_body")
+    const row_template = $("#row_template").clone()
+    const radio_template = $(".form-check").first().clone()
+    $("#questionnaire_button").click(function (e) {
+        tb.children().remove()
+        quesn_data.forEach(ques => {
+            var row = row_template.clone()
+            row.attr("id", "row_" + ques["position"])
+            row.find("th").text(ques["position"])
+            row.find("td").eq(0).text(ques["question"])
+            var radio_group = row.find("td").eq(1)
+            radio_group.children().remove()
+            var ans_set
+            if (ques["type"] == "pick") {
+                ans_set = pick_answer
+            } else if (ques["type"] == "toggle") {
+                ans_set = toggle_answer
+            }
+            ans_set.forEach(function (ans, index){
+                var radio = radio_template.clone()
+                var p = index + 1
+                radio.find("input").attr({
+                    name: "row_" + ques["position"],
+                    id: "row_" + ques["position"] + "_" + p,
+                    value: index
+                })
+                if(index == 0){
+                    radio.find("input").prop("checked", true)
+                }
+                radio.find("label").attr("for", "row_" + ques["position"] + "_" + p)
+                radio.find("label").text(ans)
+                radio_group.append(radio)
+            })
+            tb.append(row)
+        })
+        $("#questionnaire_modal").modal("show")
+    })
+    //问卷提交事件
+    $("#questionnaire_submit_button").click(function (e) { 
+        //获取分数
+        var score = new Array()
+        for(let i = 1; i < quesn_data.length + 1; i++){
+            score[i - 1] = $(`input[name='row_${i}']:checked`).val()
+        }
+        //评分
+        var symps = new Array()
+        judge_standard.forEach(jstan => {
+            var sum = 0
+            jstan["clause_position"].forEach(function(pos, i){
+                sum += score[pos - 1] * jstan["weight"][i]
+            })
+            if(sum >= jstan["threshold"]){
+                symps.push(jstan["name"])
+            }
+        })
+        $("#search_result").text(String(symps))
+    })
+})

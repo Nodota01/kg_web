@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Boot Home page</title>
+    <title>助眠知识图谱平台</title>
     <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
     <script src="static/js/bootstrap.bundle.min.js"></script>
     <script src="static/js/jquery-3.6.0.min.js"></script>
@@ -35,6 +35,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">关于</a>
                 </li>
+                <li class="nav-item">
+                    <a id="questionnaire_button" class="nav-link">问卷</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -50,7 +53,7 @@
     y- 对于同时设置*-top和*-bottom
     空白 - 对于在元素的所有 4 个边上设置 amargin或的类padding 
     -->
-    <div class="container-md p-3 my-5 border bg-light text-body rounded">
+    <div class="container-md m-2 h-auto w-auto mx-auto border bg-light text-body rounded">
         <div class="col-md-6 col-10 input-group my-2">
             <button type="button" id="type_text" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
                 类型
@@ -71,12 +74,14 @@
                 搜索
             </button>
         </div>
-        <code id="search_result" class="p-3">
+        <p id="search_result" class="text-center text-info m-1">
             Hello
-        </code>
+            <span id="search_loadding" class="spinner-border text-info invisible"></span>
+        </p>
         <div id="chart" style="width: auto;height: 600px;"></div>
     </div>
-    <!-- 模态框 -->
+
+    <!-- 节点详情模态框 -->
     <div id="node_detail_modal" class="modal fade">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
             <div class="modal-content">
@@ -96,6 +101,73 @@
             </div>
         </div>
     </div>
+
+
+    <!-- 问卷模态框 -->
+    <div id="questionnaire_modal" class="modal fade">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 id="questionnaire_title" class="modal-title">问卷</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- 模态框内容 -->
+                <div id="questionnaire_content" class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">问题</th>
+                                <th scope="col">选项</th>
+                            </tr>
+                        </thead>
+                        <tbody id="questionnaire_body">
+                            <tr id="row_template">
+                                <th scope="row">1</th>
+                                <td>您有入睡困难吗?</td>
+                                <td>
+                                    <!-- 单选项，通过name区分 -->
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="row_1"
+                                            id="row_1_1" value="0">
+                                        <label class="form-check-label" for="row_1_1">没有</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="row_1"
+                                            id="row_1_2" value="1">
+                                        <label class="form-check-label" for="row_1_2">很少</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="row_1"
+                                            id="row_1_3" value="2">
+                                        <label class="form-check-label" for="row_1_3">有时</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="row_1"
+                                            id="row_1_4" value="3">
+                                        <label class="form-check-label" for="row_1_4">经常</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="row_1"
+                                            id="row_1_5" value="4">
+                                        <label class="form-check-label" for="row_1_5">总是</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button id="questionnaire_submit_button" type="button" class="btn btn-danger"
+                        data-bs-dismiss="modal">提交</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

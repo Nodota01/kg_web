@@ -5,6 +5,8 @@ from flask import render_template
 from flask import request
 from Result import *
 from flask import session, g
+from flask import send_from_directory
+import os
 import py2neo as neo
 import db
 import logging
@@ -23,6 +25,10 @@ logging.basicConfig(level=logging.INFO)
 def index_page():
     return render_template('index.html')
 
+@app.route('/favicon.ico')#设置icon
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),#对于当前文件所在路径,比如这里是static下的favicon.ico
+                               'favicon.ico', mimetype='type="image/x-icon"')
 
 @app.post('/q')
 def query():

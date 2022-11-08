@@ -1,0 +1,232 @@
+[
+    {
+        "position": 1,
+        "question": "您有入睡困难吗?",
+        "type": "pick"
+    },
+    {
+        "position": 2,
+        "question": "您有睡中梦多吗?",
+        "type": "pick"
+    },
+    {
+        "position": 3,
+        "question": "您有睡中早醒吗?",
+        "type": "pick"
+    },
+    {
+        "position": 4,
+        "question": "您有睡觉经常醒过来吗?",
+        "type": "pick"
+    },
+    {
+        "position": 5,
+        "question": "您有整夜都睡不着吗?",
+        "type": "pick"
+    },
+    {
+        "position": 6,
+        "question": "您有经常胃脘痛吗?",
+        "type": "pick"
+    },
+    {
+        "position": 7,
+        "question": "您有腹部胀满吗?",
+        "type": "pick"
+    },
+    {
+        "position": 8,
+        "question": "您有酸水上泛咽喉吗?",
+        "type": "pick"
+    },
+    {
+        "position": 9,
+        "question": "您有喉痰多吗?",
+        "type": "pick"
+    },
+    {
+        "position": 10,
+        "question": "您有恶心感吗?",
+        "type": "pick"
+    },
+    {
+        "position": 11,
+        "question": "您有胸闷吗?",
+        "type": "pick"
+    },
+    {
+        "position": 12,
+        "question": "您有经常感到烦躁不安吗?",
+        "type": "pick"
+    },
+    {
+        "position": 13,
+        "question": "您有口干吗?",
+        "type": "pick"
+    },
+    {
+        "position": 14,
+        "question": "您有口苦吗?",
+        "type": "pick"
+    },
+    {
+        "position": 15,
+        "question": "您有便秘或大便干燥吗?",
+        "type": "pick"
+    },
+    {
+        "position": 16,
+        "question": "您有睡中出汗?",
+        "type": "pick"
+    },
+    {
+        "position": 17,
+        "question": "您有间歇性发热吗?",
+        "type": "pick"
+    },
+    {
+        "position": 18,
+        "question": "您有手足心和心胸烦热吗?",
+        "type": "pick"
+    },
+    {
+        "position": 19,
+        "question": "您有耳鸣吗?",
+        "type": "pick"
+    },
+    {
+        "position": 20,
+        "question": "您有腰酸、腿软无力吗?",
+        "type": "pick"
+    },
+    {
+        "position": 21,
+        "question": "您有感到疲乏无力吗?",
+        "type": "pick"
+    },
+    {
+        "position": 22,
+        "question": "您有白天易出汗吗?",
+        "type": "pick"
+    },
+    {
+        "position": 23,
+        "question": "您有呼吸短促，类似微喘、气难以接续吗?",
+        "type": "pick"
+    },
+    {
+        "position": 24,
+        "question": "您有胆小，容易被吓?",
+        "type": "pick"
+    },
+    {
+        "position": 25,
+        "question": "您有心慌吗?",
+        "type": "pick"
+    },
+    {
+        "position": 26,
+        "question": "您有四肢麻木吗?",
+        "type": "pick"
+    },
+    {
+        "position": 27,
+        "question": "您经常感到头晕眼花吗?",
+        "type": "pick"
+    },
+    {
+        "position": 28,
+        "question": "您有眼睛干涩吗?",
+        "type": "pick"
+    },
+    {
+        "position": 29,
+        "question": "您经常怕冷吗?",
+        "type": "pick"
+    },
+    {
+        "position": 30,
+        "question": "您有手脚冰凉吗?",
+        "type": "pick"
+    },
+    {
+        "position": 31,
+        "question": "您有晚上小便多吗?",
+        "type": "pick"
+    },
+    {
+        "position": 32,
+        "question": "您有经常叹气吗?",
+        "type": "pick"
+    },
+    {
+        "position": 33,
+        "question": "您有感到闷闷不乐吗?",
+        "type": "pick"
+    },
+    {
+        "position": 34,
+        "question": "您胁肋部胀满吗?",
+        "type": "pick"
+    },
+    {
+        "position": 35,
+        "question": "您身上有刺痛感吗?",
+        "type": "pick"
+    },
+    {
+        "position": 36,
+        "question": "您有口唇青紫吗?",
+        "type": "pick"
+    },
+    {
+        "position": 37,
+        "question": "淡白舌",
+        "type": "toggle"
+    },
+    {
+        "position": 38,
+        "question": "青紫舌",
+        "type": "toggle"
+    },
+    {
+        "position": 39,
+        "question": "瘀点瘀斑舌",
+        "type": "toggle"
+    },
+    {
+        "position": 40,
+        "question": "腻苔",
+        "type": "toggle"
+    },
+    {
+        "position": 41,
+        "question": "黄苔",
+        "type": "toggle"
+    },
+    {
+        "position": 42,
+        "question": "少苔",
+        "type": "toggle"
+    },
+    {
+        "position": 43,
+        "question": "舌下脉络增粗",
+        "type": "toggle"
+    },
+    {
+        "position": 44,
+        "question": "滑脉",
+        "type": "toggle"
+    },
+    {
+        "position": 45,
+        "question": "沉脉",
+        "type": "toggle"
+    },
+    {
+        "position": 46,
+        "question": "弦脉",
+        "type": "toggle"
+    }
+]

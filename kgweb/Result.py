@@ -1,4 +1,6 @@
 class Result:
+    """API返回模板，维护一个data字典，以及代码与信息
+    """
     def __init__(self, data = dict()):
         self.__data = data
         self.__code = 0

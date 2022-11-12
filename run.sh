@@ -1,1 +1,2 @@
-flask --app app --debug run --host=0.0.0.0 --port=9999
+#!/bin/bash
+flask --app kgweb --debug run --host=0.0.0.0 --port=9999

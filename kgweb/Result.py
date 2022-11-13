@@ -3,8 +3,6 @@ class Result:
     """
     def __init__(self, data = dict()):
         self.__data = data
-        self.__code = 0
-        self.__msg = ''
 
     def __getitem__(self, key):
         return self.__data.get(key, None)
@@ -21,5 +19,7 @@ class Result:
     def success(self) -> dict :
         return {'code':1, 'msg':'success', 'data':self.__data}
     
-    def fail(self) -> dict :
-        return {'code':0, 'msg':'fail', 'data':''}
+    def fail(self, error : str = None) -> dict :
+        if str is not None:
+            self.__data['error'] = error
+        return {'code':0, 'msg':'fail', 'data':self.__data}

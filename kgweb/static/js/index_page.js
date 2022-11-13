@@ -165,6 +165,9 @@ function search() {
 }
 
 $(document).ready(function () {
+    //设置主页url
+    $("#home_page_link").attr("href", cur_url);
+
     //搜索请求
     $("#search_text").keydown(function (e) {
         if (e.which == 13) {

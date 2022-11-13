@@ -9,11 +9,14 @@ from flask import send_from_directory
 import os
 import kgweb.db as db
 import logging
+import datetime
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    # 配置，其中session过期时间为7天
     app.config.from_mapping(
+        PERMANENT_SESSION_LIFETIME = datetime.timedelta(days=7),
         SECRET_KEY='dev',
         GRAPH_DATABASE='bolt://localhost:7687,neo4j,AAA200010199',
         DATABASE=os.path.join(app.instance_path, 'kgweb.sqlite')
@@ -41,7 +44,7 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
 
     @app.route('/')
-    def index_page():
+    def index():
         return render_template('index.html')
 
     @app.route('/favicon.ico')#设置icon
@@ -71,6 +74,7 @@ def create_app(test_config=None):
             '疾病': ['疾病概述']
         }
         param = request.json
+        current_app.logger.debug(request.json)
         pattern = f'.*?{param["key_word"]}.*?'
         prop = prop_map[param['type']][param['prop']] if prop_map.get(
             param['type'], None) is not None and prop_map[param['type']].get(param['prop'], None) is not None else param['prop']

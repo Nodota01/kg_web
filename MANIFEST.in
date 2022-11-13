@@ -1,0 +1,4 @@
+include kgweb/schema.sql
+graft kgweb/static
+graft kgweb/templates
+global-exclude *.pyc

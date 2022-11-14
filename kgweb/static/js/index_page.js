@@ -3,6 +3,10 @@
 const cur_url = window.location.protocol + "//"
     + window.location.hostname + ":" + window.location.port + "/"
 
+//右上角的菜单组件
+const login_item = '<li class="nav-item"><a class="nav-link" href="login">登录</a></li>'
+const info_item = '<li class="nav-item dropdown me-4"><a id="drop_title" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dropdown link</a><ul class="dropdown-menu" aria-labelledby="drop_title">    <li><a class="dropdown-item" href="/info">个人信息</a></li>    <li><a class="dropdown-item" href="#">评测记录</a></li>    <li><a class="dropdown-item bg-danger text-light" href="/logout">登出</a></li></ul></li>'
+
 //读type_prop.json
 function read_file(name) { // name为文件所在位置
     let xhr = new XMLHttpRequest(),
@@ -12,9 +16,6 @@ function read_file(name) { // name为文件所在位置
     xhr.send(null)
     return xhr.status === okStatus ? xhr.responseText : null
 }
-const fp = JSON.parse(read_file('static/data/type_prop.json'))
-const quesn_data = JSON.parse(read_file("static/data/form_data.json"))
-const judge_standard = JSON.parse(read_file("static/data/judge_standard.json"))
 
 //搜索方法
 function search() {
@@ -164,9 +165,39 @@ function search() {
     })
 }
 
+
+
 $(document).ready(function () {
-    //设置主页url
-    $("#home_page_link").attr("href", cur_url);
+    const fp = JSON.parse(read_file('static/data/type_prop.json'))
+    //根据登录状态设置
+    var is_login = false
+    var user_name = ''
+    $.ajax({
+        type: "post",
+        url: "isLogin",
+        data: "",
+        dataType: "json",
+        success: function (response) {
+            if (response.msg == 'success') {
+                is_login = response.data.isLogin
+                user_name = response.data.name
+            } else {
+                is_login = false
+            }
+        },
+        error: function (xhr) {
+            is_login = false
+        },
+        complete: function (xhr, status) {
+            if (is_login) {
+                var item = $(info_item)
+                item.find("#drop_title").text(`您好，${user_name}`)
+                $("#navbar_end").append(item)
+            } else {
+                $("#navbar_end").html(login_item)
+            }
+        }
+    })
 
     //搜索请求
     $("#search_text").keydown(function (e) {
@@ -179,12 +210,6 @@ $(document).ready(function () {
     $("#search_button").click(function (e) {
         search()
     })
-
-    // //选定搜索类型更改文本
-    // $(".type_option").click(function (e) { 
-    //     var type = $(this).text()
-    //     $(".type_text").text(type);
-    // });
 
     //修改下拉菜单选项
     $("#type_list").children().remove()
@@ -211,6 +236,7 @@ $(document).ready(function () {
     const row_template = $("#row_template").clone()
     const radio_template = $(".form-check").first().clone()
     $("#questionnaire_button").click(function (e) {
+        const quesn_data = JSON.parse(read_file("static/data/form_data.json"))
         tb.children().remove()
         quesn_data.forEach(ques => {
             var row = row_template.clone()
@@ -225,7 +251,7 @@ $(document).ready(function () {
             } else if (ques["type"] == "toggle") {
                 ans_set = toggle_answer
             }
-            ans_set.forEach(function (ans, index){
+            ans_set.forEach(function (ans, index) {
                 var radio = radio_template.clone()
                 var p = index + 1
                 radio.find("input").attr({
@@ -233,7 +259,7 @@ $(document).ready(function () {
                     id: "row_" + ques["position"] + "_" + p,
                     value: index
                 })
-                if(index == 0){
+                if (index == 0) {
                     radio.find("input").prop("checked", true)
                 }
                 radio.find("label").attr("for", "row_" + ques["position"] + "_" + p)
@@ -245,20 +271,21 @@ $(document).ready(function () {
         $("#questionnaire_modal").modal("show")
     })
     //问卷提交事件
-    $("#questionnaire_submit_button").click(function (e) { 
+    $("#questionnaire_submit_button").click(function (e) {
+        const judge_standard = JSON.parse(read_file("static/data/judge_standard.json"))
         //获取分数
         var score = new Array()
-        for(let i = 1; i < quesn_data.length + 1; i++){
+        for (let i = 1; i < quesn_data.length + 1; i++) {
             score[i - 1] = $(`input[name='row_${i}']:checked`).val()
         }
         //评分
         var symps = new Array()
         judge_standard.forEach(jstan => {
             var sum = 0
-            jstan["clause_position"].forEach(function(pos, i){
+            jstan["clause_position"].forEach(function (pos, i) {
                 sum += score[pos - 1] * jstan["weight"][i]
             })
-            if(sum >= jstan["threshold"]){
+            if (sum >= jstan["threshold"]) {
                 symps.push(jstan["name"])
             }
         })

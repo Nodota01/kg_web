@@ -19,24 +19,40 @@ def register():
     POST请求为注册接口
     """
     if request.method == 'POST':
+        if request.is_json == False : return Result().fail('Not json')
         phone = request.json['phone']
+        name = request.json['name']
         password = request.json['password']
+        age = request.json['age']
+        gender = request.json['gender']
+        email = request.json['email']
+        address = request.json['address']
         current_app.logger.debug(request.json)
         db = get_db()
         error = None
         if not phone:
-            error = 'Phone number is required.'
-        elif not password:
-            error = 'Password is required.'
+            error += 'Phone number is required.'
+        if not password:
+            error += 'Password is required.'
+        if not name:
+            error += 'Name is required.'
+        if not age:
+            error += 'Age is required.'
+        elif not isinstance(age, int):
+            error += 'Age type error'
+        elif age <= 0 or age >= 110:
+            error += 'Age range error'
+        if not gender:
+            error += 'Gender is required.'
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO user (phone, password) VALUES (?, ?)",
-                    (phone, generate_password_hash(password)),
+                    "INSERT INTO user (phone, password, name, age, gender, email, address) VALUES (?, ?, ?, ?, ?, ? ,?)",
+                    (phone, generate_password_hash(password), name, age, gender, email, address),
                 )
                 db.commit()
             except db.IntegrityError:
-                error = f"Phone number {phone} is already registered."
+                error = f"电话号码{phone}已被注册"
             else:
                 return Result().success()
         return Result().fail(error)
@@ -47,9 +63,10 @@ def login():
     """
     登录
     GET请求获取网页
-    POST请求为登录接口
+    POST请求为登录接口：成功返回用户名
     """
     if request.method == 'POST':
+        if request.is_json == False : return Result().fail('Not json')
         phone = request.json['phone']
         password = request.json['password']
         current_app.logger.debug(request.json)
@@ -58,20 +75,36 @@ def login():
         user = db.execute(
             'SELECT * FROM user WHERE phone = ?', (phone,)
         ).fetchone()
-
         if user is None:
-            error = 'Incorrect phone number.'
+            error = '账号不存在或电话号码错误'
         elif not check_password_hash(user['password'], password):
-            error = 'Incorrect password.'
+            error = '密码错误'
 
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return Result().success()
+            res = Result({'name':user['name']})
+            return res.success()
         else:
             return Result().fail(error)
-
     return render_template('auth/login.html')
+
+@bp.route('/info', methods=('GET', 'POST'))
+def info():
+    """
+    返回用户个人信息界面
+    """
+    if g.user is None:
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        user = {k : g.user[k] for k in g.user.keys()}
+        for k in ('id', 'password', 'created'):
+            user.pop(k, None)
+        return Result(user).success()
+    else:
+        return render_template('auth/info.html')
+
 
 @bp.post('/isLogin')
 def is_login():
@@ -81,6 +114,8 @@ def is_login():
     res = Result()
     current_app.logger.debug(f'user:{g.user["name"]} is login' if g.user is not None else 'not login')
     res['isLogin'] = g.user is not None
+    if res['isLogin']:
+        res['name'] = g.user['name']
     return res.success()
 
 @bp.before_app_request

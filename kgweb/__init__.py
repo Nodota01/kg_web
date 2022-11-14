@@ -5,7 +5,7 @@ from flask import render_template
 from flask import request
 from kgweb.Result import *
 from flask import session, g
-from flask import send_from_directory
+from flask import send_from_directory, current_app
 import os
 import kgweb.db as db
 import logging
@@ -17,7 +17,7 @@ def create_app(test_config=None):
     # 配置，其中session过期时间为7天
     app.config.from_mapping(
         PERMANENT_SESSION_LIFETIME = datetime.timedelta(days=7),
-        SECRET_KEY='dev',
+        SECRET_KEY='1fcea46a3e36a7416633efed7ed9a4605d69e7581b1a2cc67bd46ce8a78babf6',
         GRAPH_DATABASE='bolt://localhost:7687,neo4j,AAA200010199',
         DATABASE=os.path.join(app.instance_path, 'kgweb.sqlite')
     )
@@ -73,6 +73,7 @@ def create_app(test_config=None):
             '穴位': ['主治', '取穴技巧', '经属', '自我按摩'],
             '疾病': ['疾病概述']
         }
+        if request.is_json == False : return Result().fail('Not json')
         param = request.json
         current_app.logger.debug(request.json)
         pattern = f'.*?{param["key_word"]}.*?'

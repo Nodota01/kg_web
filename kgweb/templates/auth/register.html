@@ -8,71 +8,59 @@
     <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
     <script src="static/js/bootstrap.bundle.min.js"></script>
     <script src="static/js/jquery-3.6.0.min.js"></script>
+    <script src="static/js/auth/auth_func.js"></script>
+    <script src="static/js/auth/register_page.js"></script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-md bg-primary navbar-dark">
         <!-- Brand -->
         <a class="navbar-brand mx-2" href="/">助眠知识图谱平台</a>
-
-        <!-- Toggler/collapsibe Button -->
-        <button class="navbar-toggler" style="margin-right:10px;" type="button" data-bs-toggle="collapse"
-            data-bs-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Navbar links -->
-        <div class="collapse navbar-collapse justify-content-start" id="collapsibleNavbar">
-            <ul class="navbar-nav px-2 text-white">
-            </ul>
-        </div>
-
-        <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
-
-        </div>
     </nav>
 
     <div class="container mt-3 p-5 bg-light h-auto rounded border shadow shadow-sm">
         <h2>注册</h2>
-        <div class="row mt-1">
-            <div class="col-lg-6">
-                <label for="phone" class="form-label">手机号码<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="phone">
+        <form>
+            <div class="row ">
+                <div class="col-lg-6">
+                    <label for="phone" class="form-label">手机号码<span class="text-danger">*</span></label>
+                    <input type="tel" class="form-control" id="phone" autocomplete="tel">
+                </div>
+                <div class="col-lg-6">
+                    <label for="password" class="form-label">密码<span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" id="password" autocomplete="current-password">
+                    <div id="password_help" class="form-text">密码只能由6-20个字母、数字、下划线构成</div>
+                </div>
             </div>
-            <div class="col-lg-6">
-                <label for="password" class="form-label">密码<span class="text-danger">*</span></label>
-                <input type="password" class="form-control" id="password">
+            <div class="row ">
+                <div class="col-lg-6">
+                    <label for="name" class="form-label">姓名<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="name" autocomplete="name">
+                </div>
+                <div class="col-lg-6">
+                    <label for="age" class="form-label">年龄<span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="age" min="1" max="110">
+                </div>
             </div>
-        </div>
-        <div class="row mt-1">
-            <div class="col-lg-6">
-                <label for="name" class="form-label">姓名<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="name">
+            <div class="row ">
+                <div class="col-lg-6">
+                    <label for="gender" class="form-label">性别</label>
+                    <select id="gender" class="form-select">
+                        <option value="男" selected>男</option>
+                        <option value="女">女</option>
+                    </select>
+                </div>
+                <div class="col-lg-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" autocomplete="email">
+                </div>
             </div>
-            <div class="col-lg-6">
-                <label for="age" class="form-label">年龄<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="age">
+            <div class="">
+                <label for="address" class="form-label">住址</label>
+                <input type="text" class="form-control" id="address" autocomplete="street-address">
             </div>
-        </div>
-        <div class="row mt-1">
-            <div class="col-lg-6">
-                <label for="gender" class="form-label">性别</label>
-                <select id="gender" class="form-select" aria-label="Default select example">
-                    <option selected>选择您的性别</option>
-                    <option value="男">男</option>
-                    <option value="女">女</option>
-                </select>
-            </div>
-            <div class="col-lg-6">
-                <label for="email" class="form-label">Email</label>
-                <input type="text" class="form-control" id="email">
-            </div>
-        </div>
-        <div class="mt-1">
-            <label for="address" class="form-label">住址</label>
-            <input type="text" class="form-control" id="address">
-        </div>
-        <button id="login_button" type="button" class="btn btn-success mt-3 px-3">确认</button>
+            <button id="register_button" type="button" class="btn btn-success mt-3 px-3">确认</button>
+        </form>
         <div id="live_alert_placeholder"></div>
     </div>
 

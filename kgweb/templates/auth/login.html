@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
     <script src="static/js/bootstrap.bundle.min.js"></script>
     <script src="static/js/jquery-3.6.0.min.js"></script>
+    <script src="static/js/auth/auth_func.js"></script>
     <script src="static/js/auth/login_page.js"></script>
 </head>
 
@@ -15,39 +16,25 @@
     <nav class="navbar navbar-expand-md bg-primary navbar-dark">
         <!-- Brand -->
         <a class="navbar-brand mx-2" href="/">助眠知识图谱平台</a>
-
-        <!-- Toggler/collapsibe Button -->
-        <button class="navbar-toggler" style="margin-right:10px;" type="button" data-bs-toggle="collapse"
-            data-bs-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Navbar links -->
-        <div class="collapse navbar-collapse justify-content-start" id="collapsibleNavbar">
-            <ul class="navbar-nav px-2 text-white">
-            </ul>
-        </div>
-
-        <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
-
-        </div>
     </nav>
 
     <div class="container mt-3 p-5 bg-light h-auto rounded border shadow shadow-sm">
         <h2>登录</h2>
-        <div class="row">
-            <div class="col-lg-6">
-                <label for="phone" class="form-label">手机号码</label>
-                <input type="text" class="form-control" id="phone">
+        <form>
+            <div class="row">
+                <div class="col-lg-6">
+                    <label for="phone" class="form-label">手机号码</label>
+                    <input type="tel" class="form-control" id="phone" autocomplete="tel">
+                </div>
+                <div class="col-lg-6">
+                    <label for="password" class="form-label">密码</label>
+                    <input type="password" class="form-control" id="password" autocomplete="current-password">
+                </div>
             </div>
-            <div class="col-lg-6">
-                <label for="password" class="form-label">密码</label>
-                <input type="password" class="form-control" id="password">
-            </div>
-        </div>
-        <button id="login_button" type="button" class="btn btn-success mt-3 px-3">登录</button>
-        <a class="btn btn-primary mt-3 px-3" href="register">注册</a>
-        <button id="test_login_button" type="button" class="btn btn-success mt-3 px-3">test_login</button>
+            <button id="login_button" type="button" class="btn btn-success mt-3 px-3">登录</button>
+            <a class="btn btn-primary mt-3 px-3" href="register">注册</a>
+            <button id="test_login_button" type="button" class="btn btn-success mt-3 px-3">test_login</button>
+        </form>
         <div id="live_alert_placeholder"></div>
     </div>
 </body>

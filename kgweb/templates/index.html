@@ -11,7 +11,8 @@
     <script src="static/js/index_page.js"></script>
     <script src="static/js/echarts.min.js"></script>
     <style>
-        html, body{
+        html,
+        body {
             height: 100%;
         }
     </style>
@@ -30,7 +31,7 @@
 
         <!-- Navbar links -->
         <div class="collapse navbar-collapse justify-content-start" id="collapsibleNavbar">
-            <ul class="navbar-nav px-2 text-white">
+            <ul class="navbar-nav px-2">
                 <li class="nav-item">
                     <a class="nav-link" href="#">帮助</a>
                 </li>
@@ -47,10 +48,8 @@
         </div>
 
         <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
-            <ul class="navbar-nav px-2">
-                <li class="nav-item">
-                    <a class="nav-link" href="login">登录</a>
-                </li>
+            <ul id="navbar_end" class="navbar-nav px-2">
+                <!-- 填充菜单组件 -->
             </ul>
         </div>
     </nav>
@@ -142,28 +141,28 @@
                                 <td>
                                     <!-- 单选项，通过name区分 -->
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="row_1"
-                                            id="row_1_1" value="0">
+                                        <input class="form-check-input" type="radio" name="row_1" id="row_1_1"
+                                            value="0">
                                         <label class="form-check-label" for="row_1_1">没有</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="row_1"
-                                            id="row_1_2" value="1">
+                                        <input class="form-check-input" type="radio" name="row_1" id="row_1_2"
+                                            value="1">
                                         <label class="form-check-label" for="row_1_2">很少</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="row_1"
-                                            id="row_1_3" value="2">
+                                        <input class="form-check-input" type="radio" name="row_1" id="row_1_3"
+                                            value="2">
                                         <label class="form-check-label" for="row_1_3">有时</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="row_1"
-                                            id="row_1_4" value="3">
+                                        <input class="form-check-input" type="radio" name="row_1" id="row_1_4"
+                                            value="3">
                                         <label class="form-check-label" for="row_1_4">经常</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="row_1"
-                                            id="row_1_5" value="4">
+                                        <input class="form-check-input" type="radio" name="row_1" id="row_1_5"
+                                            value="4">
                                         <label class="form-check-label" for="row_1_5">总是</label>
                                     </div>
                                 </td>

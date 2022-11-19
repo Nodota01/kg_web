@@ -1,15 +1,11 @@
-from html import escape
-from webbrowser import get
-from flask import Flask
-from flask import render_template
-from flask import request
-from kgweb.Result import *
-from flask import session, g
-from flask import send_from_directory, current_app
-import os
-import kgweb.db as db
-import logging
 import datetime
+import logging
+import os
+import flask_login
+from flask import (Flask, current_app, g, render_template, request,
+                   send_from_directory, session)
+from kgweb.Result import *
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -19,9 +15,13 @@ def create_app(test_config=None):
         PERMANENT_SESSION_LIFETIME = datetime.timedelta(days=7),
         SECRET_KEY='1fcea46a3e36a7416633efed7ed9a4605d69e7581b1a2cc67bd46ce8a78babf6',
         GRAPH_DATABASE='bolt://localhost:7687,neo4j,AAA200010199',
-        DATABASE=os.path.join(app.instance_path, 'kgweb.sqlite')
+        DATABASE=os.path.join(app.instance_path, 'kgweb.sqlite'),
+        SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://user01:user01@localhost:3306/kgweb',
+        SQLALCHEMY_TRACK_MODIFICATIONS = False,
+        SQLALCHEMY_ECHO = True
     )
 
+    # 加载配置文件
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
@@ -34,23 +34,36 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-    
+
     # 注册db的方法
     from . import db
     db.init_app(app)
-    
+
     # 注册auth蓝图
     from . import auth
     app.register_blueprint(auth.bp)
+    from . import scale
+    app.register_blueprint(scale.bp)
+    
+    #初始化登录管理器
+    login_manager = flask_login.LoginManager()
+    login_manager.login_view = "auth.login"
+    login_manager.init_app(app)
 
     @app.route('/')
     def index():
-        return render_template('index.html')
+        return render_template('index.html.j2')
 
-    @app.route('/favicon.ico')#设置icon
+    @app.route('/favicon.ico')  # 设置icon
     def favicon():
-        return send_from_directory(os.path.join(app.root_path, 'static'),#对于当前文件所在路径,比如这里是static下的favicon.ico
-                                'favicon.ico', mimetype='type="image/x-icon"')
+        return send_from_directory(os.path.join(app.root_path, 'static'),  # 对于当前文件所在路径,比如这里是static下的favicon.ico
+                                   'favicon.ico', mimetype='type="image/x-icon"')
+        
+    #配置登录管理器
+    @login_manager.user_loader
+    def load_user(id):
+        from .db import db, User
+        return db.session.execute(db.select(User).where(User.id == id)).scalar_one_or_none()
 
     @app.post('/q')
     def query():
@@ -73,7 +86,8 @@ def create_app(test_config=None):
             '穴位': ['主治', '取穴技巧', '经属', '自我按摩'],
             '疾病': ['疾病概述']
         }
-        if request.is_json == False : return Result().fail('Not json')
+        if request.is_json == False:
+            return Result().fail('Not json')
         param = request.json
         current_app.logger.debug(request.json)
         pattern = f'.*?{param["key_word"]}.*?'
@@ -81,7 +95,7 @@ def create_app(test_config=None):
             param['type'], None) is not None and prop_map[param['type']].get(param['prop'], None) is not None else param['prop']
         result = Result({"categories": list(),
                         "nodes": list(),
-                        "edges": list()})
+                         "edges": list()})
         categories = set()
         g = db.get_graph_db()
         sub_g = g.run(
@@ -123,7 +137,6 @@ def create_app(test_config=None):
         logging.info(f'/q post val:{request.json}')
         return result.success()
     return app
-
 
 
 # @app.route('/profile/<username>')

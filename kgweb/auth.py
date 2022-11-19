@@ -1,10 +1,10 @@
-import functools
-from . import Result
-from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app
-)
+from flask import (Blueprint, current_app, flash, g, redirect, render_template,
+                   request, session, url_for, abort)
 from werkzeug.security import check_password_hash, generate_password_hash
-from kgweb.db import get_db
+from kgweb.db import db, User
+import flask_login
+from . import Result
+
 
 """
 登录验证蓝图，蓝图名称是auth，url的前缀是/auth
@@ -20,41 +20,38 @@ def register():
     """
     if request.method == 'POST':
         if request.is_json == False : return Result().fail('Not json')
-        phone = request.json['phone']
-        name = request.json['name']
-        password = request.json['password']
-        age = request.json['age']
-        gender = request.json['gender']
-        email = request.json['email']
-        address = request.json['address']
+        user = User(
+                phone = request.json['phone'],
+                name = request.json['name'],
+                password = request.json['password'],
+                age = request.json['age'],
+                gender = request.json['gender'],
+                email = request.json['email'],
+                address = request.json['address']
+        )
         current_app.logger.debug(request.json)
-        db = get_db()
         error = None
-        if not phone:
+        if not user.phone:
             error += 'Phone number is required.'
-        if not password:
+        elif db.session.execute(db.select(User).where(User.phone == user.phone)).scalar_one_or_none() is not None:
+            error += f"电话号码{user.phone}已被注册"
+        if not user.password:
             error += 'Password is required.'
-        if not name:
+        if not user.name:
             error += 'Name is required.'
-        if not age:
+        if not user.age:
             error += 'Age is required.'
-        elif not isinstance(age, int):
+        elif not isinstance(user.age, int):
             error += 'Age type error'
-        elif age <= 0 or age >= 110:
+        elif user.age <= 0 or user.age >= 110:
             error += 'Age range error'
-        if not gender:
+        if not user.gender:
             error += 'Gender is required.'
         if error is None:
-            try:
-                db.execute(
-                    "INSERT INTO user (phone, password, name, age, gender, email, address) VALUES (?, ?, ?, ?, ?, ? ,?)",
-                    (phone, generate_password_hash(password), name, age, gender, email, address),
-                )
-                db.commit()
-            except db.IntegrityError:
-                error = f"电话号码{phone}已被注册"
-            else:
-                return Result().success()
+            user.password = generate_password_hash(user.password)
+            db.session.add(user)
+            db.session.commit()
+            return Result().success()
         return Result().fail(error)
     return render_template('auth/register.html')
 
@@ -70,37 +67,33 @@ def login():
         phone = request.json['phone']
         password = request.json['password']
         current_app.logger.debug(request.json)
-        db = get_db()
         error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE phone = ?', (phone,)
-        ).fetchone()
+        user = db.session.execute(db.select(User).where(User.phone == phone)).scalar_one_or_none()
+        print(user)
         if user is None:
             error = '账号不存在或电话号码错误'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user.password, password):
             error = '密码错误'
-
         if error is None:
-            session.clear()
-            session['user_id'] = user['id']
-            res = Result({'name':user['name']})
+            res = Result({'name':user.name})
+            flask_login.login_user(user)
             return res.success()
         else:
             return Result().fail(error)
     return render_template('auth/login.html')
 
 @bp.route('/info', methods=('GET', 'POST'))
+@flask_login.login_required
 def info():
-    """
-    返回用户个人信息界面
-    """
-    if g.user is None:
-        return redirect(url_for('index'))
-    
     if request.method == 'POST':
-        user = {k : g.user[k] for k in g.user.keys()}
-        for k in ('id', 'password', 'created'):
-            user.pop(k, None)
+        user = {
+            'phone' : flask_login.current_user.phone,
+            'name' : flask_login.current_user.name,
+            'age' : flask_login.current_user.age,
+            'gender' : flask_login.current_user.gender,
+            'email' : flask_login.current_user.email,
+            'address' : flask_login.current_user.address
+        }
         return Result(user).success()
     else:
         return render_template('auth/info.html')
@@ -112,30 +105,17 @@ def is_login():
     验证是否登录
     """
     res = Result()
-    current_app.logger.debug(f'user:{g.user["name"]} is login' if g.user is not None else 'not login')
-    res['isLogin'] = g.user is not None
+    res['isLogin'] = flask_login.current_user.is_authenticated
     if res['isLogin']:
-        res['name'] = g.user['name']
+        res['name'] = flask_login.current_user.name
     return res.success()
-
-@bp.before_app_request
-def load_logged_in_user():
-    """
-    在该蓝图所有方法执行前检查id
-    并将用户存入g
-    """
-    user_id = session.get('user_id')
-    if user_id is None:
-        g.user = None
-    else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
-        
+    
 @bp.route('/logout')
+@flask_login.login_required
 def logout():
     """
     退出登录
     """
     session.clear()
+    flask_login.logout_user()
     return redirect(url_for('index'))

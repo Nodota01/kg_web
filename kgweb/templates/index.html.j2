@@ -39,7 +39,7 @@
                     <a class="nav-link" href="#">关于</a>
                 </li>
                 <li class="nav-item">
-                    <a role="button" id="questionnaire_button" class="nav-link">体质评测</a>
+                    <a class="nav-link" href="/scale/zhenghou">体质评测</a>
                 </li>
                 <li class="nav-item">
                     <a role="button" class="nav-link">睡眠质量评测</a>
@@ -48,8 +48,24 @@
         </div>
 
         <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
-            <ul id="navbar_end" class="navbar-nav px-2">
+            <ul id="navbar_end" class="navbar-nav ps-2 me-5">
                 <!-- 填充菜单组件 -->
+                {%if not current_user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link" href="login">登录</a></li>
+                {%else%}
+                <li class="nav-item dropdown"><a id="drop_title" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">您好，{{current_user.name}}</a>
+                    <ul class="dropdown-menu" aria-labelledby="drop_title">
+                        <li><a class="dropdown-item" href="/info">个人信息</a></li>
+                        {%if current_user.role == 'admin' %}
+                        <li><a class="dropdown-item" href="#">用户管理</a></li>
+                        <li><a class="dropdown-item" href="#">评测记录管理</a></li>
+                        {%else%}
+                        <li><a class="dropdown-item" href="#">评测记录</a></li>
+                        {%endif%}
+                        <li><a class="dropdown-item bg-danger text-light" href="/logout">登出</a></li>
+                    </ul>
+                </li>
+                {%endif%}
             </ul>
         </div>
     </nav>

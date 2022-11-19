@@ -13,6 +13,12 @@ class Result:
     def __delitem__(self, key):
         if key in self.__date: del self.__date[key]
         
+    def unauthorized(self) -> dict :
+        return {'code':4, 'msg':'unauthorized'}
+        
+    def redirect(self, url : str) -> dict :
+        return {'code':3, 'msg':'redirect', 'data':{'url':url}}
+    
     def empty(self) -> dict :
         return {'code':2, 'msg':'empty'}
         

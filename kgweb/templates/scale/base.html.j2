@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{g.scale_data['name']}}|助眠知识图谱平台</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md bg-primary navbar-dark">
+        <!-- Brand -->
+        <a class="navbar-brand mx-2" href="/">助眠知识图谱平台</a>
+    </nav>
+
+    <div class="container mt-3 p-5 bg-light h-auto rounded border shadow shadow-sm">
+        <div class="text-dark text-center h1">{{g.scale_data['name']}}</div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">问题</th>
+                    <th scope="col">选项</th>
+                </tr>
+            </thead>
+            <tbody id="questionnaire_body">
+                {%for item in g.scale_data['ques']%}
+                <tr>
+                    <th scope="row">{{item['position']}}</th>
+                    <td>{{item['question']}}</td>
+                    <td>
+                        {%for cho in g.scale_data['anes'][item['type']]%}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="{{'row_%d'%item['position']}}"
+                                id="{{'row_%d_%d'%(item['position'],loop.index)}}"
+                                value="{{g.scale_data['anes_weight'][item['type']][loop.index0]}}">
+                            <label class="form-check-label"
+                                for="{{'row_%d_%d'%(item['position'],loop.index)}}">{{cho}}</label>
+                        </div>
+                        {%endfor%}
+                    </td>
+                </tr>
+                {%endfor%}
+
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

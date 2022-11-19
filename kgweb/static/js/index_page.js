@@ -3,10 +3,6 @@
 const cur_url = window.location.protocol + "//"
     + window.location.hostname + ":" + window.location.port + "/"
 
-//右上角的菜单组件
-const login_item = '<li class="nav-item"><a class="nav-link" href="login">登录</a></li>'
-const info_item = '<li class="nav-item dropdown me-4"><a id="drop_title" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dropdown link</a><ul class="dropdown-menu" aria-labelledby="drop_title">    <li><a class="dropdown-item" href="/info">个人信息</a></li>    <li><a class="dropdown-item" href="#">评测记录</a></li>    <li><a class="dropdown-item bg-danger text-light" href="/logout">登出</a></li></ul></li>'
-
 //读type_prop.json
 function read_file(name) { // name为文件所在位置
     let xhr = new XMLHttpRequest(),
@@ -169,35 +165,6 @@ function search() {
 
 $(document).ready(function () {
     const fp = JSON.parse(read_file('static/data/type_prop.json'))
-    //根据登录状态设置
-    var is_login = false
-    var user_name = ''
-    $.ajax({
-        type: "post",
-        url: "isLogin",
-        data: "",
-        dataType: "json",
-        success: function (response) {
-            if (response.msg == 'success') {
-                is_login = response.data.isLogin
-                user_name = response.data.name
-            } else {
-                is_login = false
-            }
-        },
-        error: function (xhr) {
-            is_login = false
-        },
-        complete: function (xhr, status) {
-            if (is_login) {
-                var item = $(info_item)
-                item.find("#drop_title").text(`您好，${user_name}`)
-                $("#navbar_end").append(item)
-            } else {
-                $("#navbar_end").html(login_item)
-            }
-        }
-    })
 
     //搜索请求
     $("#search_text").keydown(function (e) {
@@ -236,7 +203,7 @@ $(document).ready(function () {
     const row_template = $("#row_template").clone()
     const radio_template = $(".form-check").first().clone()
     $("#questionnaire_button").click(function (e) {
-        const quesn_data = JSON.parse(read_file("static/data/form_data.json"))
+        const quesn_data = JSON.parse(read_file("static/data/scales/zhenghou_scale.json"))
         tb.children().remove()
         quesn_data.forEach(ques => {
             var row = row_template.clone()
@@ -272,7 +239,7 @@ $(document).ready(function () {
     })
     //问卷提交事件
     $("#questionnaire_submit_button").click(function (e) {
-        const judge_standard = JSON.parse(read_file("static/data/judge_standard.json"))
+        const judge_standard = JSON.parse(read_file("static/data/scales/zhenghou_standard.json"))
         //获取分数
         var score = new Array()
         for (let i = 1; i < quesn_data.length + 1; i++) {

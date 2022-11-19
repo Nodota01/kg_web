@@ -3,11 +3,16 @@ from setuptools import find_packages, setup
 setup(
     name='kgweb',
     version='1.0.0',
+    author="Nodota",
+    author_email="nbdota01@outlook.com",
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
         'flask',
         'pytest',
-        'coverage'
+        'coverage',
+        'pymysql',
+        'flask_sqlalchemy',
+        'flask_login'
     ],
 )

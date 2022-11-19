@@ -1,4 +1,14 @@
-[
+{
+    "name":"体质测评",
+    "anes":{
+        "pick":["没有", "很少", "有时", "经常", "总是"],
+        "toggle":["无", "有"]
+    },
+    "anes_weight":{
+        "pick":[0, 1, 2, 3, 4],
+        "toggle":[0, 1]
+    },
+    "ques":[
     {
         "position": 1,
         "question": "您有入睡困难吗?",
@@ -229,4 +239,4 @@
         "question": "弦脉",
         "type": "toggle"
     }
-]
+]}

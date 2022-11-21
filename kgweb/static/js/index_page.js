@@ -28,7 +28,7 @@ function search() {
             var text = ''
             for (let o in params.data.des) {
                 text += '<h5 class="text-dark bg-light p-2">' + o + '</h5>'
-                text += '<p class="text-dark">' + params.data.des[o] + '</p>'
+                text += '<p class="text-dark p-2">' + params.data.des[o] + '</p>'
             }
             $("#node_detail_content").children().remove()
             $("#node_detail_content").text('')

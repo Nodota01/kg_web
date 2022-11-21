@@ -1,6 +1,8 @@
 import click
 import py2neo as neo
 import flask_login
+import json
+import flask
 from flask import current_app, g
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -37,6 +39,38 @@ class User(db.Model, flask_login.UserMixin):
     role = db.Column(db.String(32), nullable=False, default='user')
     created = db.Column(db.DateTime, default=datetime.now())
 
+    def getdict(self) -> dict:
+        return {
+            'id': self.id,
+            'phone': self.phone,
+            'name': self.name,
+            'age': self.age,
+            'gender': self.gender,
+            'email': self.email,
+            'address': self.address,
+            'role': self.role,
+            'created': self.created
+        }
+
+
+# 自定义flask的json编码器
+class CustomJsonProvider(flask.json.provider.JSONProvider):
+    # 自定义json编码器
+    class CustomJsonEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, User):
+                return obj.getdict()
+            if isinstance(obj, datetime):
+                return obj.isoformat(' ')
+            # Let the base class default method raise the TypeError
+            return json.JSONEncoder.default(self, obj)
+
+    def dumps(self, obj, **kwargs) -> str:
+        return json.dumps(obj, cls=self.CustomJsonEncoder, ensure_ascii=True)
+
+    def loads(self, s, **kwargs):
+        return json.loads(s)
+
 
 def get_graph_db():
     '''获取图数据库连接
@@ -62,17 +96,9 @@ def init_db():
     """
     db.drop_all()
     db.create_all()
-    users = [User(
-        phone='17688888888',
-        name='田所浩二',
-        password='pbkdf2:sha256:260000$aDGiF8hQNDkHWtzz$80f75b5c1f286bba110476de4b75fe63e557720bf1805cb443881d2837ad4806',
-        age=24,
-        gender='男',
-        email='114514@qq.com',
-        address='东京下北泽'
-    ),
+    users = [
         User(
-        phone='17699999999',
+        phone='17688888888',
         name='纯平',
         password='pbkdf2:sha256:260000$aDGiF8hQNDkHWtzz$80f75b5c1f286bba110476de4b75fe63e557720bf1805cb443881d2837ad4806',
         age=24,
@@ -81,6 +107,16 @@ def init_db():
         role='admin',
         address='古龙顶'
     )]
+    for i in range(100):
+        users.append(User(
+            phone=f'176{i}',
+            name=f'田所浩{i}',
+            password='pbkdf2:sha256:260000$aDGiF8hQNDkHWtzz$80f75b5c1f286bba110476de4b75fe63e557720bf1805cb443881d2837ad4806',
+            age=24,
+            gender='男',
+            email='114514@qq.com',
+            address='东京下北泽'
+        ))
     db.session.add_all(users)
     db.session.commit()
     # db = get_db()

@@ -35,8 +35,12 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # 注册db的方法
+    # 注册json方法
     from . import db
+    app.json_provider_class = db.CustomJsonProvider
+    app.json = db.CustomJsonProvider(app)
+
+    # 注册db的方法
     db.init_app(app)
 
     # 注册auth蓝图
@@ -44,13 +48,15 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
     from . import scale
     app.register_blueprint(scale.bp)
+    from . import manage
+    app.register_blueprint(manage.bp)
     
     #初始化登录管理器
     login_manager = flask_login.LoginManager()
     login_manager.login_view = "auth.login"
     login_manager.init_app(app)
 
-    @app.route('/')
+    @app.route('/', methods = ['GET'])
     def index():
         return render_template('index.html.j2')
 

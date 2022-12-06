@@ -3,6 +3,8 @@ import py2neo as neo
 import flask_login
 import json
 import flask
+import os
+import random
 from flask import current_app, g
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -96,29 +98,32 @@ def init_db():
     """
     db.drop_all()
     db.create_all()
-    users = [
-        User(
-        phone='17688888888',
-        name='纯平',
-        password='pbkdf2:sha256:260000$aDGiF8hQNDkHWtzz$80f75b5c1f286bba110476de4b75fe63e557720bf1805cb443881d2837ad4806',
-        age=24,
-        gender='男',
-        email='admin@kgweb.com',
-        role='admin',
-        address='古龙顶'
-    )]
-    for i in range(100):
-        users.append(User(
-            phone=f'176{i}',
-            name=f'田所浩{i}',
+    zones = ['荔湾区','越秀区','海珠区','天河区','白云区','黄埔区','番禺区','花都区','萝岗区','南沙区','增城区','从化区']
+    with open(os.path.join(current_app.root_path, f'static/data/names.json') , mode='r', encoding='utf8') as f:
+        names = json.loads(f.read())
+        users = [
+            User(
+            phone='17688888888',
+            name='纯平',
             password='pbkdf2:sha256:260000$aDGiF8hQNDkHWtzz$80f75b5c1f286bba110476de4b75fe63e557720bf1805cb443881d2837ad4806',
             age=24,
             gender='男',
-            email='114514@qq.com',
-            address='东京下北泽'
-        ))
-    db.session.add_all(users)
-    db.session.commit()
+            email='admin@kgweb.com',
+            role='admin',
+            address='古龙顶'
+        )]
+        for i, name in enumerate(names):
+            users.append(User(
+                phone='176{:0>8d}'.format(i),
+                name=name,
+                password='pbkdf2:sha256:260000$aDGiF8hQNDkHWtzz$80f75b5c1f286bba110476de4b75fe63e557720bf1805cb443881d2837ad4806',
+                age=random.randint(18, 40),
+                gender='男' if random.randint(0,1) == 1 else '女',
+                email='{:x<8d}@qq.com'.format(i),
+                address=f'广东省广州市{zones[random.randint(0, len(zones) - 1)]}{name[1:]}街道{name[0]}村{i}巷{i}号'
+            ))
+        db.session.add_all(users)
+        db.session.commit()
     # db = get_db()
     # with current_app.open_resource('schema.sql') as f:
     #     db.executescript(f.read().decode('utf8'))
@@ -138,3 +143,4 @@ def close_all_db(e=None):
     # if db is not None:
     #     db.close()
     g.pop('graph_db', None)
+

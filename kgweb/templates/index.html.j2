@@ -57,7 +57,7 @@
                     <ul class="dropdown-menu" aria-labelledby="drop_title">
                         <li><a class="dropdown-item" href="/info">个人信息</a></li>
                         {%if current_user.role == 'admin' %}
-                        <li><a class="dropdown-item" href="/users">用户管理</a></li>
+                        <li><a class="dropdown-item" href="/user">用户管理</a></li>
                         <li><a class="dropdown-item" href="#">评测记录管理</a></li>
                         {%else%}
                         <li><a class="dropdown-item" href="#">评测记录</a></li>
@@ -124,72 +124,6 @@
                 </div>
                 <!-- 模态框底部 -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">关闭</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- 问卷模态框 -->
-    <div id="questionnaire_modal" class="modal fade">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
-            <div class="modal-content">
-                <!-- 模态框头部 -->
-                <div class="modal-header">
-                    <h4 id="questionnaire_title" class="modal-title">问卷</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <!-- 模态框内容 -->
-                <div id="questionnaire_content" class="modal-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">问题</th>
-                                <th scope="col">选项</th>
-                            </tr>
-                        </thead>
-                        <tbody id="questionnaire_body">
-                            <tr id="row_template">
-                                <th scope="row">1</th>
-                                <td>您有入睡困难吗?</td>
-                                <td>
-                                    <!-- 单选项，通过name区分 -->
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="row_1" id="row_1_1"
-                                            value="0">
-                                        <label class="form-check-label" for="row_1_1">没有</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="row_1" id="row_1_2"
-                                            value="1">
-                                        <label class="form-check-label" for="row_1_2">很少</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="row_1" id="row_1_3"
-                                            value="2">
-                                        <label class="form-check-label" for="row_1_3">有时</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="row_1" id="row_1_4"
-                                            value="3">
-                                        <label class="form-check-label" for="row_1_4">经常</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="row_1" id="row_1_5"
-                                            value="4">
-                                        <label class="form-check-label" for="row_1_5">总是</label>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- 模态框底部 -->
-                <div class="modal-footer">
-                    <button id="questionnaire_submit_button" type="button" class="btn btn-danger"
-                        data-bs-dismiss="modal">提交</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">关闭</button>
                 </div>
             </div>

@@ -46,28 +46,4 @@ $(function () {
             })
         }
     })
-
-    //测试登录
-    $("#test_login_button").click(function (e) {
-        $.ajax({
-            type: "post",
-            url: "isLogin",
-            data: "",
-            dataType: "json",
-            success: function (response) {
-                if (response.msg == 'success') {
-                    if (response.data.isLogin) {
-                        alert(`已登录${response.data.name}`, 'success')
-                    } else {
-                        alert("未登录", 'danger')
-                    }
-                } else {
-                    alert(`请求失败`, 'danger')
-                }
-            },
-            error: function (xhr) {
-                alert(`错误：${xhr.status} ${xhr.statusText}`, "danger");
-            }
-        })
-    })
 })

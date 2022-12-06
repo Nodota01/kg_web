@@ -8,7 +8,12 @@
     <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
     <script src="static/js/bootstrap.bundle.min.js"></script>
     <script src="static/js/jquery-3.6.0.min.js"></script>
-    <script src="static/js/auth/info_page.js"></script>
+    {% macro filter_none(prop) %}
+        {% if prop is none %}
+        {%else%}
+        {{prop}}
+        {% endif %}
+    {% endmacro %}
 </head>
 
 <body>
@@ -16,37 +21,36 @@
         <!-- Brand -->
         <a class="navbar-brand mx-2" href="/">助眠知识图谱平台</a>
     </nav>
-
     <div class="container mt-3 p-5 bg-light h-auto rounded border shadow shadow-sm">
         <h2>个人信息</h2>
         <div class="row mt-2">
             <div class="col-lg-6">
                 <label for="phone" class="form-label">手机号码</label>
-                <input type="text" readonly class="form-control" id="phone">
+                <input type="text" readonly class="form-control" id="phone" value="{{current_user.phone}}">
             </div>
             <div class="col-lg-6">
                 <label for="name" class="form-label">姓名</label>
-                <input type="text" readonly class="form-control" id="name">
+                <input type="text" readonly class="form-control" id="name" value="{{current_user.name}}">
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-lg-6">
                 <label for="age" class="form-label">年龄</label>
-                <input type="text" readonly class="form-control" id="age">
+                <input type="text" readonly class="form-control" id="age" value="{{current_user.age}}">
             </div>
             <div class="col-lg-6">
                 <label for="gender" class="form-label">性别</label>
-                <input type="text" readonly class="form-control" id="gender">
+                <input type="text" readonly class="form-control" id="gender" value="{{current_user.gender}}">
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-lg-6">
                 <label for="email" class="form-label">Email</label>
-                <input type="text" readonly class="form-control" id="email">
+                <input type="text" readonly class="form-control" id="email" value="{{filter_none(current_user.email) | trim}}">
             </div>
             <div class="col-lg-6">
                 <label for="address" class="form-label">住址</label>
-                <input type="text" readonly class="form-control" id="address">
+                <input type="text" readonly class="form-control" id="address" value="{{filter_none(current_user.address) | trim}}">
             </div>
         </div>
     </div>

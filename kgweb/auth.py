@@ -82,33 +82,10 @@ def login():
             return Result().fail(error)
     return render_template('auth/login.html')
 
-@bp.route('/info', methods=('GET', 'POST'))
+@bp.route('/info', methods=('GET',))
 @flask_login.login_required
 def info():
-    if request.method == 'POST':
-        user = {
-            'phone' : flask_login.current_user.phone,
-            'name' : flask_login.current_user.name,
-            'age' : flask_login.current_user.age,
-            'gender' : flask_login.current_user.gender,
-            'email' : flask_login.current_user.email,
-            'address' : flask_login.current_user.address
-        }
-        return Result(user).success()
-    else:
-        return render_template('auth/info.html')
-
-
-@bp.post('/isLogin')
-def is_login():
-    """
-    验证是否登录
-    """
-    res = Result()
-    res['isLogin'] = flask_login.current_user.is_authenticated
-    if res['isLogin']:
-        res['name'] = flask_login.current_user.name
-    return res.success()
+    return render_template('auth/info.html.j2')
     
 @bp.route('/logout')
 @flask_login.login_required

@@ -1,8 +1,21 @@
 class Result:
     """API返回模板，维护一个data字典，以及代码与信息
     """
-    def __init__(self, data = dict()):
+    def __init__(self, data = dict(), page = None):
         self.__data = data
+        if page is not None: # 如果有，读分页信息
+            self.__data['items'] = page.items
+            self.__data['page'] = page.page
+            self.__data['per_page'] = page.per_page
+            self.__data['total'] = page.total
+            self.__data['first'] = page.first
+            self.__data['last'] = page.last
+            self.__data['pages'] = page.pages
+            self.__data['has_prev'] = page.has_prev
+            self.__data['has_next'] = page.has_next
+            self.__data['prev_num'] = page.prev_num
+            self.__data['next_num'] = page.next_num
+            self.__data['iter_pages'] = list(page.iter_pages())
 
     def __getitem__(self, key):
         return self.__data.get(key, None)

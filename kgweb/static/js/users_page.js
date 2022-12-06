@@ -1,12 +1,14 @@
 "use strict"
 
 // 获取用户POST请求
-function get_users_post(page, on_success, on_error) {
+function get_user_post(page, query, on_success, on_error) {
     $.ajax({
         type: "post",
-        url: "users",
+        url: "user",
         data: JSON.stringify({
-            page: page
+            page: page,
+            query_type: query.query_type,
+            query_data: query.query_data
         }),
         contentType: "application/json",
         dataType: "json",
@@ -35,17 +37,19 @@ const search_type = ['id', '电话', '姓名']
 
 $(function () {
     var current_page = 1
-    var next_page = 0
-    var prev_page = 0
+    var next_page = null
+    var prev_page = null
+    var query_type = null
+    var query_data = null
     var users = new Array()
 
     //前往指定页数并更新页面
     function go_page(page) {
-        get_users_post(page, function (response) {
+        get_user_post(page, { query_type: query_type, query_data: query_data }, function (response) {
             if (response.msg == 'fail') {
-                console.log('get_users 请求体数据错误')
+                alert('get_user 请求体数据错误')
             } else if (response.msg == 'empty') {
-                console.log(`get_users 无数据`)
+                alert(`无搜索结果`)
             } else if (response.msg == 'success') {
                 var table_body = $("#table_body")
                 table_body.children().remove()
@@ -132,7 +136,40 @@ $(function () {
     //设置搜索框
     $("#type_list").children().remove()
     for (let v of search_type) {
-        $("#type_list").append(`<li><a class="dropdown-item type_option">${v}</a></li>`)
+        var li = $(`<li><a class="dropdown-item type_option">${v}</a></li>`)
+        li.click(function (e) {
+            $("#type_text").text($(this).find("a").text())
+        })
+        $("#type_list").append(li)
     }
     go_page(current_page)
+    //搜索动作
+    function search_func () {
+        var type_text = $("#type_text").text().trim()
+        var data_text = $("#search_text").val().trim()
+        if (type_text == "字段" || data_text.length == 0) return
+        query_type = type_text
+        query_data = data_text
+        //翻译成数据库字段
+        if (Object.hasOwnProperty.call(trans_user_dict_vers, type_text)) {
+            query_type = trans_user_dict_vers[query_type]
+        }
+        current_page = 1
+        go_page(current_page)
+    }
+    $("#search_button").click(search_func)
+    $("#search_text").keydown(function (e) { 
+        if(e.which == 13){
+            search_func()
+        }else return
+    })
+    //清空搜索
+    $("#clear_search_button").click(function (e) { 
+        query_type = null
+        query_data = null
+        current_page = 1
+        $("#search_text").val("")
+        $("#type_text").text("字段")
+        go_page(current_page)
+    })
 })

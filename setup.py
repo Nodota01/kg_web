@@ -1,5 +1,5 @@
 from setuptools import find_packages, setup
-# 输入pip install -e . 安装到本地，flask -app kgweb run 到处可运行
+# 输入[pip install -e .] 安装到本地，[flask -app kgweb run] 到处可运行
 setup(
     name='kgweb',
     version='1.0.0',
@@ -13,6 +13,10 @@ setup(
         'coverage',
         'pymysql',
         'flask_sqlalchemy',
-        'flask_login'
+        'flask_login',
+        'openpyxl',
+        'pandas',
+        'requests',
+        'bs4'
     ],
 )

@@ -2,6 +2,7 @@ import datetime
 import logging
 import os
 import flask_login
+from . import spider
 from flask import (Flask, current_app, g, render_template, request,
                    send_from_directory, session)
 from kgweb.Result import *
@@ -10,6 +11,15 @@ from kgweb.Result import *
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    app.logger.debug(
+'''
+███╗   ███╗ █████╗ ██████╗ ███████╗    ██████╗ ██╗   ██╗    ███╗   ██╗ ██████╗ ██████╗  ██████╗ ████████╗ █████╗ 
+████╗ ████║██╔══██╗██╔══██╗██╔════╝    ██╔══██╗╚██╗ ██╔╝    ████╗  ██║██╔═══██╗██╔══██╗██╔═══██╗╚══██╔══╝██╔══██╗
+██╔████╔██║███████║██║  ██║█████╗      ██████╔╝ ╚████╔╝     ██╔██╗ ██║██║   ██║██║  ██║██║   ██║   ██║   ███████║
+██║╚██╔╝██║██╔══██║██║  ██║██╔══╝      ██╔══██╗  ╚██╔╝      ██║╚██╗██║██║   ██║██║  ██║██║   ██║   ██║   ██╔══██║
+██║ ╚═╝ ██║██║  ██║██████╔╝███████╗    ██████╔╝   ██║       ██║ ╚████║╚██████╔╝██████╔╝╚██████╔╝   ██║   ██║  ██║
+╚═╝     ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝    ╚═════╝    ╚═╝       ╚═╝  ╚═══╝ ╚═════╝ ╚═════╝  ╚═════╝    ╚═╝   ╚═╝  ╚═╝
+''')
     # 配置，其中session过期时间为7天
     app.config.from_mapping(
         PERMANENT_SESSION_LIFETIME = datetime.timedelta(days=7),
@@ -50,11 +60,23 @@ def create_app(test_config=None):
     app.register_blueprint(scale.bp)
     from . import manage
     app.register_blueprint(manage.bp)
+    from . import recommend
+    app.register_blueprint(recommend.bp)
     
     #初始化登录管理器
     login_manager = flask_login.LoginManager()
     login_manager.login_view = "auth.login"
     login_manager.init_app(app)
+    
+    #配置ip黑名单
+    app.logger.debug('getting black list...')
+    badip_list = spider.get_badip()
+    app.logger.debug('getting black list...done')
+    @app.before_request
+    def block_badip():
+        ip = request.environ.get('REMOTE_ADDR')
+        if ip in badip_list:
+            app.logger.debug(f'block ip {ip} in badip list!')
 
     @app.route('/', methods = ['GET'])
     def index():

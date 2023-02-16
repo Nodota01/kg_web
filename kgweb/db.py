@@ -4,7 +4,9 @@ import flask_login
 import json
 import flask
 import os
+# import redis
 import random
+import logging
 from flask import current_app, g
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -16,6 +18,7 @@ current_app是另一个特殊对象，它指向处理请求的 Flask 应用程�
 """
 
 db = SQLAlchemy()
+# REDIS = None
 
 
 def init_app(app):
@@ -24,6 +27,8 @@ def init_app(app):
     app.teardown_appcontext(close_all_db)
     app.cli.add_command(init_db_command)
     # 初始化SQLAlchemy
+    # global REDIS 
+    # REDIS = app.config.get('REDIS', None)
     db.init_app(app)
 
 
@@ -82,6 +87,20 @@ def get_graph_db():
         g.graph_db = neo.Graph(_res[0], auth=(_res[1], _res[2]))
     return g.graph_db
 
+# def get_redis_db():
+#     '''获取redis连接
+#     '''
+#     try:
+#         if REDIS is not None:
+#             info = REDIS.split(':')
+#             r = redis.Redis(host = info[0], port = info[1], decode_responses = True)
+#         else:
+#             #默认localhost:9379
+#             r = redis.Redis(decode_responses = True)
+#         r.ping()
+#         return r
+#     except:
+#         return None
 # def get_db():
 #     if 'db' not in g:
 #         # g.db = sqlite3.connect(
@@ -94,7 +113,7 @@ def get_graph_db():
 
 
 def init_db():
-    """初始化数据库，读取sql文件并执行
+    """初始化数据库，读取sql文件并执行，密码123456
     """
     db.drop_all()
     db.create_all()
@@ -105,7 +124,7 @@ def init_db():
             User(
             phone='17688888888',
             name='纯平',
-            password='pbkdf2:sha256:260000$aDGiF8hQNDkHWtzz$80f75b5c1f286bba110476de4b75fe63e557720bf1805cb443881d2837ad4806',
+            password='pbkdf2:sha256:260000$9S0Qbqfs34b3dXad$c09acc53f81c78e041af927dfdc1b1f0823ac0fef310a1a78443e760463b1a07',
             age=24,
             gender='男',
             email='admin@kgweb.com',
@@ -116,7 +135,7 @@ def init_db():
             users.append(User(
                 phone='176{:0>8d}'.format(i),
                 name=name,
-                password='pbkdf2:sha256:260000$aDGiF8hQNDkHWtzz$80f75b5c1f286bba110476de4b75fe63e557720bf1805cb443881d2837ad4806',
+                password='pbkdf2:sha256:260000$9S0Qbqfs34b3dXad$c09acc53f81c78e041af927dfdc1b1f0823ac0fef310a1a78443e760463b1a07',
                 age=random.randint(18, 40),
                 gender='男' if random.randint(0,1) == 1 else '女',
                 email='{:x<8d}@qq.com'.format(i),

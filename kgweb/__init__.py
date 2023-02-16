@@ -4,7 +4,7 @@ import os
 import flask_login
 from . import spider
 from flask import (Flask, current_app, g, render_template, request,
-                   send_from_directory, session)
+                   send_from_directory, session, abort)
 from kgweb.Result import *
 
 
@@ -25,8 +25,9 @@ def create_app(test_config=None):
         PERMANENT_SESSION_LIFETIME = datetime.timedelta(days=7),
         SECRET_KEY='1fcea46a3e36a7416633efed7ed9a4605d69e7581b1a2cc67bd46ce8a78babf6',
         GRAPH_DATABASE='bolt://localhost:7687,neo4j,AAA200010199',
+        REDIS = 'localhost:6379',
         DATABASE=os.path.join(app.instance_path, 'kgweb.sqlite'),
-        SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://user01:user01@localhost:3306/kgweb',
+        SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://user01:Iamtheuser01!@localhost:3306/kgweb',
         SQLALCHEMY_TRACK_MODIFICATIONS = False,
         SQLALCHEMY_ECHO = True
     )
@@ -69,14 +70,15 @@ def create_app(test_config=None):
     login_manager.init_app(app)
     
     #配置ip黑名单
-    app.logger.debug('getting black list...')
-    badip_list = spider.get_badip()
-    app.logger.debug('getting black list...done')
-    @app.before_request
-    def block_badip():
-        ip = request.environ.get('REMOTE_ADDR')
-        if ip in badip_list:
-            app.logger.debug(f'block ip {ip} in badip list!')
+    # app.logger.debug('getting black list...')
+    # badip_list = spider.get_badip()
+    # app.logger.debug('getting black list...done')
+    # @app.before_request
+    # def block_badip():
+    #     ip = request.environ.get('REMOTE_ADDR')
+    #     if ip in badip_list:
+    #         app.logger.debug(f'block ip {ip} in badip list!')
+    #         abort(403)
 
     @app.route('/', methods = ['GET'])
     def index():
@@ -165,21 +167,3 @@ def create_app(test_config=None):
         logging.info(f'/q post val:{request.json}')
         return result.success()
     return app
-
-
-# @app.route('/profile/<username>')
-# def profile(username):
-#     return f'{escape(username)}\'s profile'
-
-
-# @app.post('/login/')
-# def login():
-#     return f'username:{request.form["username"]}\npassword:{request.form["password"]}'
-
-
-# @app.get('/users/')
-# def get_users():
-#     return {
-#         'username': 'tom',
-#         'passwrod': '123456'
-#     }

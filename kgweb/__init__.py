@@ -63,6 +63,10 @@ def create_app(test_config=None):
     app.register_blueprint(manage.bp)
     from . import recommend
     app.register_blueprint(recommend.bp)
+    from . import herb_recommend
+    app.register_blueprint(herb_recommend.bp)
+    from . import model_assert
+    model_assert.load_model(app)
     
     #初始化登录管理器
     login_manager = flask_login.LoginManager()

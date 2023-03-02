@@ -77,12 +77,10 @@ def create_app(test_config=None):
     # app.logger.debug('getting black list...')
     # badip_list = spider.get_badip()
     # app.logger.debug('getting black list...done')
-    # @app.before_request
-    # def block_badip():
-    #     ip = request.environ.get('REMOTE_ADDR')
-    #     if ip in badip_list:
-    #         app.logger.debug(f'block ip {ip} in badip list!')
-    #         abort(403)
+    @app.before_request
+    def block():
+        if request.method not in ["GET", "POST"]:
+            abort(403)
 
     @app.route('/', methods = ['GET'])
     def index():

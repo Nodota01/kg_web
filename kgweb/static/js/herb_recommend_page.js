@@ -43,11 +43,32 @@ $(function () {
         })
     })
 
+    //搜索功能
+    $("#search_button").click(function (e) { 
+        if($("#search_text").val().trim().length == 0){
+            return
+        }
+        $("#symp_list_container").scrollTop(0)
+        $("#symp_list_container").scrollTop($(`input[value*='${$("#search_text").val()}']`).offset().top - 100)
+    })
+
+    //清除功能
+    $("#clear_button").click(function (e) {
+        $("#symps_col").empty()
+        $("#herbs_col").empty()
+        $("input").prop("checked", false)
+    })
+
     //点选症状加入症状框中
     $("input").change(function (e) {
+        var inp = $(this)
         if($(this).prop("checked")){
-            d = $(`<div class="d-inline text-center border rounded p-2 m-1 h-auto" value="${$(this).val()}">${$(this).val()} </div>`)
+            d = $(`<div class="d-inline-block text-center border rounded p-2 m-1" value="${$(this).val()}">${$(this).val()} <button type="button" class="btn-close"></button></div>`)
             $("#symps_col").append(d)
+            d.children("button").click(function (e) {
+                inp.prop("checked", false)
+                $(this).parent().remove()
+            })
         }else{
             $("#symps_col").children(`div[value="${$(this).val()}"]`).remove()
         }

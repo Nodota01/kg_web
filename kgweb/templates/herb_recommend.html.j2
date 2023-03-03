@@ -22,9 +22,9 @@
         <!-- Brand -->
         <a class="navbar-brand mx-2" href="/">助眠知识图谱平台</a>
     </nav>
-    <div class="container mt-3 mb-3 p-5 bg-light rounded border shadow shadow-sm" id="top" style="height: 90%;">
+    <div class="container mt-3 mb-3 p-4 px-5 bg-light rounded border shadow shadow-sm" id="top" style="height: 90%;">
         <div class="row h-100">
-            <div class="col-md-3 overflow-auto" style="height: 100%;">
+            <div id="symp_list_container" class="col-md-3 overflow-auto" style="height: 100%;">
                 <ul id="symp_list" class="list-group text-center">
                     {# <li class="list-group-item">
                         <div class="input-group">
@@ -46,17 +46,24 @@
                     {%endfor%}
                 </ul>
             </div>
-            <div class="col-md-9 text-center bg-white rounded border shadow shadow-sm p-1">
-                <div id="symps_col" class="text-center bg-white rounded border shadow shadow-sm p-3 ">
+            <div class="col-md-9 text-center  p-1">
+                <div id="symps_col" class=" bg-white rounded border shadow shadow-sm p-2">
                 </div>
-                <div class="d-inline mt-3">个数：</div>
-                <select class="d-inline w-auto form-select mt-2">
-                    <option value="5" selected>5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                </select>
-                <button id="generate_button" type="button" class="btn btn-success">生成↓</button>
-                <div id="herbs_col" class="text-center bg-white rounded border shadow shadow-sm p-2 mt-1">
+                <div>
+                    <div class="input-group mt-1">
+                        <button id="search_button" type="button" class="btn btn-outline-success">🔍</button>
+                        <input id="search_text" type="text" class="form-control" placeholder="关键字">
+                    </div>
+                    <button id="clear_button" type="button" class="btn btn-outline-danger m-1">清除</button>
+                    <div class="d-inline mt-3">个数：</div>
+                    <select class="d-inline w-auto form-select mt-2">
+                        <option value="5" selected>5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                    </select>
+                    <button id="generate_button" type="button" class="btn btn-outline-success m-1">生成↓</button>
+                </div>
+                <div id="herbs_col" class="text-center bg-white rounded border shadow shadow-sm p-2">
                 </div>
             </div>
         </div>

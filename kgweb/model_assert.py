@@ -19,10 +19,10 @@ class ModelLoader():
                                     for s in f_symptom_contains.readlines()]
             self.symptom_contain_sorted = [
                 s.strip('\n') for s in f_symptom_contains_sorted.readlines()]
-        self.mlp_model = torch.load(os.path.join(
-            app.root_path, 'static/data/model/MLP_((390, 800), (800, 1000), (1000, 811)).pth'), map_location=torch.device('cpu'))
+        self.__mlp_model : torch.nn.Module = torch.load(os.path.join(
+            app.root_path, 'static/data/model/MLP.pth'), map_location=torch.device('cpu')).train(False)
         # self.trans_model : models.ERModel = torch.load(os.path.join(app.root_path, 'static/data/model/TransE_50.pkl'), map_location=torch.device('cpu'))
-        self.simi_dict = json.load(open(os.path.join(
+        self.__simi_dict = json.load(open(os.path.join(
             app.root_path, 'static/data/TransE50_simi_herbs.json'), mode='r', encoding='utf8'))
         app.logger.debug('loading models.....done')
 
@@ -34,10 +34,10 @@ class ModelLoader():
         symps_multi_hot = torch.zeros((1, 390), dtype=torch.int32)
         for index in symps_ids:
             symps_multi_hot[0][index] = 1
-        herbs_ids = torch.topk(self.mlp_model(
+        herbs_ids = torch.topk(self.__mlp_model(
             symps_multi_hot.float())[0], k)[1]
         herbs = [self.herb_contain[h] for h in herbs_ids]
-        return {h: self.simi_dict[h][:10] for h in herbs}
+        return {h: self.__simi_dict[h][:10] for h in herbs}
 
 
 model_loader = None

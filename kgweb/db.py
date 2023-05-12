@@ -4,9 +4,7 @@ import flask_login
 import json
 import flask
 import os
-# import redis
 import random
-import logging
 from flask import current_app, g
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -18,8 +16,6 @@ current_app是另一个特殊对象，它指向处理请求的 Flask 应用程�
 """
 
 db = SQLAlchemy()
-# REDIS = None
-
 
 def init_app(app):
     """注册会话结束后摧毁数据库连接，注册命令
@@ -27,8 +23,6 @@ def init_app(app):
     app.teardown_appcontext(close_all_db)
     app.cli.add_command(init_db_command)
     # 初始化SQLAlchemy
-    # global REDIS 
-    # REDIS = app.config.get('REDIS', None)
     db.init_app(app)
 
 
@@ -87,30 +81,6 @@ def get_graph_db():
         g.graph_db = neo.Graph(_res[0], auth=(_res[1], _res[2]))
     return g.graph_db
 
-# def get_redis_db():
-#     '''获取redis连接
-#     '''
-#     try:
-#         if REDIS is not None:
-#             info = REDIS.split(':')
-#             r = redis.Redis(host = info[0], port = info[1], decode_responses = True)
-#         else:
-#             #默认localhost:9379
-#             r = redis.Redis(decode_responses = True)
-#         r.ping()
-#         return r
-#     except:
-#         return None
-# def get_db():
-#     if 'db' not in g:
-#         # g.db = sqlite3.connect(
-#         #     current_app.config['DATABASE'],
-#         #     detect_types=sqlite3.PARSE_DECLTYPES
-#         # )
-#         # g.db.row_factory = sqlite3.Row
-#         g.db = db.session
-#     return g.db
-
 
 def init_db():
     """初始化数据库，读取sql文件并执行，密码123456
@@ -143,9 +113,6 @@ def init_db():
             ))
         db.session.add_all(users)
         db.session.commit()
-    # db = get_db()
-    # with current_app.open_resource('schema.sql') as f:
-    #     db.executescript(f.read().decode('utf8'))
 
 
 @click.command('init-db')
@@ -158,8 +125,4 @@ def init_db_command():
 
 
 def close_all_db(e=None):
-    # db = g.pop('db', None)
-    # if db is not None:
-    #     db.close()
     g.pop('graph_db', None)
-

@@ -1,11 +1,6 @@
 # 静态类，加载模型数据
-import logging
 import torch
-import pykeen
-import math
 import os
-import flask
-from pykeen import models
 import json
 
 

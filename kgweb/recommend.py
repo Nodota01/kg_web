@@ -1,6 +1,4 @@
-from kgweb.db import db
-from flask import (Blueprint, current_app, flash, g, redirect, render_template,
-                   request, session, url_for)
+from flask import (Blueprint, current_app, render_template)
 import pandas as pd
 import os
 

@@ -1,11 +1,5 @@
-from flask import (Blueprint, current_app, flash, g, redirect, render_template,
-                   request, session, url_for, abort)
-from werkzeug.security import check_password_hash, generate_password_hash
-from kgweb.db import db, User
-import flask_login
-import json
-import re
-import logging
+from flask import (Blueprint, current_app, render_template,
+                   request)
 from . import Result, model_assert
 
 bp = Blueprint('herb_recommend', __name__)

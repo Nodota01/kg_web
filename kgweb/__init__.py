@@ -2,9 +2,8 @@ import datetime
 import logging
 import os
 import flask_login
-from . import spider
-from flask import (Flask, current_app, g, render_template, request,
-                   send_from_directory, session, abort)
+from flask import (Flask, current_app, render_template, request,
+                   send_from_directory, abort)
 from kgweb.Result import *
 
 
@@ -73,10 +72,6 @@ def create_app(test_config=None):
     login_manager.login_view = "auth.login"
     login_manager.init_app(app)
     
-    #配置ip黑名单
-    # app.logger.debug('getting black list...')
-    # badip_list = spider.get_badip()
-    # app.logger.debug('getting black list...done')
     @app.before_request
     def block():
         if request.method not in ["GET", "POST"]:

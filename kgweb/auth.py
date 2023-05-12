@@ -1,5 +1,5 @@
-from flask import (Blueprint, current_app, flash, g, redirect, render_template,
-                   request, session, url_for, abort)
+from flask import (Blueprint, current_app, redirect, render_template,
+                   request, session, url_for)
 from werkzeug.security import check_password_hash, generate_password_hash
 from kgweb.db import db, User
 import flask_login

@@ -24,9 +24,7 @@ def create_app(test_config=None):
         PERMANENT_SESSION_LIFETIME = datetime.timedelta(days=7),
         SECRET_KEY='1fcea46a3e36a7416633efed7ed9a4605d69e7581b1a2cc67bd46ce8a78babf6',
         GRAPH_DATABASE='bolt://localhost:7687,neo4j,AAA200010199',
-        REDIS = 'localhost:6379',
-        DATABASE=os.path.join(app.instance_path, 'kgweb.sqlite'),
-        SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://user01:Iamtheuser01!@localhost:3306/kgweb',
+        SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://user01:Iamtheuser01!@nodota.cn:3306/kgweb',
         SQLALCHEMY_TRACK_MODIFICATIONS = False,
         SQLALCHEMY_ECHO = True
     )

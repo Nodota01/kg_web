@@ -62,6 +62,8 @@ def create_app(test_config=None):
     app.register_blueprint(recommend.bp)
     from . import herb_recommend
     app.register_blueprint(herb_recommend.bp)
+    from . import chat
+    app.register_blueprint(chat.bp)
     from . import model_assert
     model_assert.load_model(app)
     

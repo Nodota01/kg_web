@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>聊天机器人|中药推荐平台</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/vue_3.3.4_vue.global.min.js"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid h-100 p-0">
+        <nav class="navbar navbar-expand-md bg-primary navbar-dark">
+        <!-- Brand -->
+        <a class="navbar-brand mx-2" href="/">中药推荐平台</a>
+        </nav>
+        <!-- 创建一个页面的主体，显示对话记录 -->
+        <div class="row w-100 m-0 bg-white">
+            <div class="col-12 p-3">
+                <!-- 使用bootstrap的card组件来显示聊天气泡 -->
+                <div class="card bg-info text-black mb-2 bg-success">
+                    <div class="card-body">
+                        <p class="card-text">Hi, What's your name?</p>
+                    </div>
+                </div>
+                <div class="card bg-secondary text-black mb-2 bg-light">
+                    <div class="card-body">
+                        <p class="card-text">My name is MOSS, What can I help you.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 创建一个页面的底部，显示输入框，发送按钮和参数滚动条 -->
+        <div class="row fixed-bottom bg-light">
+            <!-- 左下方的输入框和发送按钮 -->
+            <div class="col-8 p-3">
+                <!-- 使用bootstrap的form组件来创建输入框和发送按钮 -->
+                    <textarea class="form-control ms-1" id="inputText" rows="3" placeholder="START HERE"></textarea>
+                    <button type="button" class="btn btn-primary w-100 m-1">SEND</button>
+            </div>
+            <!-- 右下角的参数滚动条 -->
+            <div class="col-4 p-3 bg-warning">
+                <!-- 使用bootstrap的custom range组件来创建滚动条 -->
+                <div>
+                    <label for="customRange1" class="text-black  ">Parameter 1</label>
+                    <input type="range" class="form-range" id="customRange1">
+                </div>
+                <div>
+                    <label for="customRange2" class="text-black ">Parameter 2</label>
+                    <input type="range" class="form-range" id="customRange2">
+                </div>
+                <div>
+                    <label for="customRange3" class="text-black ">Parameter 3</label>
+                    <input type="range" class="form-range" id="customRange3">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
